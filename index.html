@@ -1,0 +1,1337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Incentive Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  <style>
+    body {
+      background: #f7fafc;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+    .sidebar {
+      min-height: 100vh;
+      background: #212529;
+      color: #eee;
+    }
+    .sidebar .nav-link {
+      color: #adb5bd;
+      border-radius: 0.3rem;
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+    }
+    .sidebar .nav-link .bi {
+      margin-right: 0.8em;
+      font-size: 1.1em;
+    }
+    .sidebar .nav-link.active,
+    .sidebar .nav-link:hover {
+      background: #343a40;
+      color: #fff;
+    }
+    .sidebar .sidebar-title {
+      font-weight: bold;
+      color: #fff;
+      font-size: 1.35rem;
+      margin-bottom: 1.2rem;
+    }
+    .card {
+      border-radius: 1rem;
+    }
+    .form-floating > .form-control,
+    .form-floating > .form-select {
+      border-radius: 0.25rem;
+    }
+    .main-content {
+      padding: 2rem;
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        min-height: unset;
+      }
+      .main-content {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <nav class="col-md-3 col-lg-2 d-md-block sidebar p-3">
+        <div class="sidebar-title mb-4">
+          <i class=""></i> Incentive
+        </div>
+        <div class="accordion" id="sidebarAccordion">
+          <!-- Masters Accordion -->
+          
+          <!-- Settings Accordion -->
+          
+        </div>
+        <ul class="nav flex-column mt-3 mb-auto">
+          <li>
+            <a href="#" class="nav-link" data-content="dashboard"
+              ><i class="bi bi-house"></i> Dashboard</a>
+          </li>
+		  <li>
+            <a href="#" class="nav-link" data-content="master"
+              ><i class="bi bi-diagram-3 me-2"></i> Master</a>
+          </li>
+		  <li>
+            <a href="#" class="nav-link" data-content="settings"
+              ><i class="bi bi-gear me-2"></i> Settings</a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" data-content="mail"
+              ><i class="bi bi-envelope"></i> Mail Settings</a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" data-content="mapping"
+              ><i class="bi bi-link-45deg"></i> Mapping</a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" data-content="bulk"
+              ><i class="bi bi-upload"></i> Bulk Upload</a>
+          </li>
+		  <li>
+            <a href="#" class="nav-link" data-content="datasync"
+              ><i class="bi bi-arrow-repeat"></i> Data Sync</a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" data-content="review"
+              ><i class="bi bi-clipboard-data"></i> Performance Review</a>
+          </li>
+          <li>
+            <a href="#" class="nav-link" data-content="reports"
+              ><i class="bi bi-graph-up"></i> Reports</a>
+          </li>
+        </ul>
+        <div class="mt-4 ms-1" style="font-size: 0.9em; color: #6c757d">
+          User: <i class="bi bi-person-circle"></i> Admin
+        </div>
+      </nav>
+      <!-- Main Content -->
+      <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
+        <div class="card shadow mb-4">
+          <div class="card-body">
+            <h3 class="mb-2" id="contentTitle">Incentive Mockup</h3>
+            <div id="dynamicContent">
+             
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+ 
+   const mastersTabsContent = `
+      <ul class="nav nav-tabs mb-3" id="mastersTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="policy-tab" data-bs-toggle="tab" data-bs-target="#policy" type="button" role="tab">Policy Master</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="kra-tab" data-bs-toggle="tab" data-bs-target="#kra" type="button" role="tab">KRA Master</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="document-tab" data-bs-toggle="tab" data-bs-target="#document" type="button" role="tab">Document Upload</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="mastersTabContent">
+        <div class="tab-pane fade show active" id="policy" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="col-md-6 form-floating">
+              <input type="text" class="form-control" id="policyName" placeholder="Policy Name" />
+              <label for="policyName">Policy Name</label>
+            </div>
+            <div class="col-md-6 form-floating">
+              <input type="date" class="form-control" id="policyDate" placeholder="Effective Date" />
+              <label for="policyDate">Effective Date</label>
+            </div>
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary">Add Policy</button>
+            </div>
+          </form>
+          <table class="table table-hover align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Policy Name</th>
+                <th>Effective Date</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Leave Policy</td>
+                <td>2025-01-01</td>
+                <td><button class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil"></i></button></td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Bonus Policy</td>
+                <td>2025-04-01</td>
+                <td><button class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil"></i></button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="kra" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label">KRA Title</label>
+              <input type="text" class="form-control" placeholder="Enter KRA Title" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Weightage (%)</label>
+              <input type="number" class="form-control" />
+            </div>
+            <div class="col-12">
+              <button class="btn btn-primary">Add KRA</button>
+            </div>
+          </form>
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>KRA Title</th>
+                <th>Weightage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Sales Growth</td>
+                <td>40%</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Customer Retention</td>
+                <td>30%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="tab-pane fade" id="document" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="col-md-8">
+              <label class="form-label">Upload Document</label>
+              <input type="file" class="form-control" />
+            </div>
+            <div class="col-md-4 align-self-end">
+              <button class="btn btn-primary mt-2">Upload</button>
+            </div>
+          </form>
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Document Name</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Appraisal.pdf</td>
+                <td>Uploaded</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Contract.docx</td>
+                <td>Pending</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    const settingsTabsContent = `
+      <ul class="nav nav-tabs mb-3" id="settingsTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="marketing-tab" data-bs-toggle="tab" data-bs-target="#marketing" type="button" role="tab">Marketing Payout</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="payout-tab" data-bs-toggle="tab" data-bs-target="#payout" type="button" role="tab">Payout</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="ebitda-tab" data-bs-toggle="tab" data-bs-target="#ebitda" type="button" role="tab">EBITDA</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="dept-ebitda-tab" data-bs-toggle="tab" data-bs-target="#dept-ebitda" type="button" role="tab">Departmentwise EBITDA</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="kra-settings-tab" data-bs-toggle="tab" data-bs-target="#kra-settings" type="button" role="tab">KRA Settings</button>
+        </li>
+      </ul>
+      <div class="tab-content" id="settingsTabContent">
+        <div class="tab-pane fade show active" id="marketing" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label">Marketing Payout Type</label>
+              <input type="text" class="form-control" placeholder="Type of payout" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Amount</label>
+              <input type="number" class="form-control" placeholder="Amount" />
+            </div>
+            <div class="col-12">
+              <button class="btn btn-primary">Save Marketing Payout</button>
+            </div>
+          </form>
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr><th>ID</th><th>Type</th><th>Amount</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>Quarterly</td><td>100000</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane fade" id="payout" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="col-md-6 form-floating">
+              <input type="month" class="form-control" id="payoutPeriod" placeholder="Payout Period" />
+              <label for="payoutPeriod">Payout Period</label>
+            </div>
+            <div class="col-12">
+              <button class="btn btn-primary">Save Payout Period</button>
+            </div>
+          </form>
+          <table class="table table-hover align-middle">
+            <thead><tr><th>ID</th><th>Period</th></tr></thead>
+            <tbody><tr><td>1</td><td>Apr-Jun</td></tr></tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane fade" id="ebitda" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label">FY EBITDA Amount</label>
+              <input type="number" class="form-control" placeholder="Enter EBITDA" />
+            </div>
+            <div class="col-12">
+              <button class="btn btn-primary">Save EBITDA</button>
+            </div>
+          </form>
+          <table class="table table-hover align-middle">
+            <thead><tr><th>Year</th><th>EBITDA</th></tr></thead>
+            <tbody><tr><td>2025</td><td>₹ 50 Cr</td></tr></tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane fade" id="dept-ebitda" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label">Department</label>
+              <input type="text" class="form-control" placeholder="Department name" />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">EBITDA Amount</label>
+              <input type="number" class="form-control" placeholder="Amount" />
+            </div>
+            <div class="col-12">
+              <button class="btn btn-primary">Save Department EBITDA</button>
+            </div>
+          </form>
+          <table class="table table-hover align-middle">
+            <thead><tr><th>Department</th><th>EBITDA</th></tr></thead>
+            <tbody><tr><td>Sales</td><td>₹ 10 Cr</td></tr></tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane fade" id="kra-settings" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="col-md-12">
+              <label class="form-label">KRA Settings</label>
+              <input type="text" class="form-control" placeholder="Enter KRA setting details" />
+            </div>
+            <div class="col-12">
+              <button class="btn btn-primary">Save KRA Setting</button>
+            </div>
+          </form>
+          <table class="table table-hover align-middle">
+            <thead><tr><th>Setting</th></tr></thead>
+            <tbody><tr><td>Auto Calculate</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+// Mapping tabs content
+const mappingTabsContent = `
+<ul class="nav nav-tabs mb-3" id="mappingTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="kra-mapping-tab" data-bs-toggle="tab" data-bs-target="#kra-mapping" type="button">KRA Mapping</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="reviewer-mapping-tab" data-bs-toggle="tab" data-bs-target="#reviewer-mapping" type="button">Reviewer Mapping</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="dept-mapping-tab" data-bs-toggle="tab" data-bs-target="#dept-mapping" type="button">Department-wise Mapping</button>
+  </li>
+</ul>
+<div class="tab-content" id="mappingTabContent">
+  <div class="tab-pane fade show active" id="kra-mapping">
+    <form id="kraForm" class="row g-3 mb-3">
+      <div class="col-md-6">
+        <label class="form-label">Select Department</label>
+        <select class="form-select" id="departmentSelect">
+          <option value="">-- Select Department --</option>
+          <option value="Sales">Sales</option>
+          <option value="HR">HR</option>
+          <option value="IT">IT</option>
+          <option value="Finance">Finance</option>
+        </select>
+      </div>
+      <div class="col-md-6 d-none" id="kraInputDiv">
+        <label class="form-label">Enter KRA</label>
+        <input type="text" class="form-control" id="kraInput" placeholder="Enter KRA here" />
+      </div>
+      <div class="col-12 d-flex gap-2">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="reset" class="btn btn-secondary" id="resetBtn">Reset</button>
+      </div>
+    </form>
+    <table class="table table-bordered d-none" id="kraTable">
+      <thead><tr><th>Department</th><th>KRA</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="tab-pane fade" id="reviewer-mapping">
+    <form class="row g-3 mb-3" id="reviewerForm">
+      <div class="col-md-6">
+        <label class="form-label">Select Department</label>
+        <select class="form-select" id="reviewerDeptSelect">
+          <option value="">-- Select Department --</option>
+          <option value="Sales">Sales</option>
+          <option value="HR">HR</option>
+          <option value="IT">IT</option>
+          <option value="Finance">Finance</option>
+        </select>
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Select CXO</label>
+        <select class="form-select" id="reviewerCxoSelect">
+          <option value="">-- Select CXO --</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+    <table class="table table-bordered mt-2 d-none" id="reviewerTable">
+      <thead><tr><th>Department</th><th>CXO</th></tr></thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <div class="tab-pane fade" id="dept-mapping">
+   <form class="row g-3 mb-3" id="deptMappingForm">
+  <div class="col-md-6">
+    <label class="form-label">Select Department</label>
+    <select class="form-select" id="deptEbitdaSelect">
+      <option value="">-- Select Department --</option>
+      <option value="Sales">Sales</option>
+      <option value="HR">HR</option>
+      <option value="IT">IT</option>
+      <option value="Finance">Finance</option>
+    </select>
+  </div>
+  <div class="col-md-6">
+    <label class="form-label">EBITDA % for this Department</label>
+    <input type="number" class="form-control" id="ebitdaInput" placeholder="Enter % (0-100)" min="0" max="100" step="0.01" disabled />
+  </div>
+  <div class="col-12 mt-4">
+    <table class="table table-bordered" id="ebitdaTable">
+      <thead>
+        <tr>
+          <th>Department</th>
+          <th>EBITDA %</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</form>
+  </div>
+</div>
+`;
+
+// Bulk Upload Tabs
+const bulkTabsContent = `
+<ul class="nav nav-tabs mb-3" id="bulkTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="kra-score-tab" data-bs-toggle="tab" data-bs-target="#kra-score" type="button">Department-wise KRA Score</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="incentive-deviation-tab" data-bs-toggle="tab" data-bs-target="#incentive-deviation" type="button">Incentive Deviation Amount</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="stop-payment-tab" data-bs-toggle="tab" data-bs-target="#stop-payment" type="button">Stop Payment Amount</button>
+  </li>
+</ul>
+<div class="tab-content" id="bulkTabContent">
+  ${generateBulkTab("kra-score")}
+  ${generateBulkTab("incentive-deviation")}
+  ${generateBulkTab("stop-payment")}
+</div>
+`;
+
+function generateBulkTab(id) {
+  return `
+  <div class="tab-pane fade ${id==="kra-score"?"show active":""}" id="${id}">
+    <form class="row g-3 mb-3 bulkForm">
+      <div class="col-md-6">
+        <label class="form-label">Select Department</label>
+        <select class="form-select bulkDeptSelect">
+          <option value="">-- Select Department --</option>
+          <option value="Sales">Sales</option>
+          <option value="HR">HR</option>
+          <option value="IT">IT</option>
+          <option value="Finance">Finance</option>
+        </select>
+      </div>
+      <div class="col-md-12">
+        <label class="form-label">Upload File</label>
+        <div class="dropzone">
+          Drag & Drop file here or click to browse
+          <input type="file" class="fileInput">
+        </div>
+      </div>
+      <div class="col-12 d-flex gap-2 align-items-center mt-2">
+        <button type="button" class="btn btn-outline-secondary downloadTemplate">
+          <i class="bi bi-download"></i> Download Template
+        </button>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="reset" class="btn btn-secondary">Reset</button>
+      </div>
+    </form>
+  </div>
+  `;
+}
+
+// Datasync tabs content
+const datasync = `
+<ul class="nav nav-tabs mb-3" id="mappingTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="bi-tab" data-bs-toggle="tab" data-bs-target="#bi-sync" type="button">BI Sync</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="cmm-tab" data-bs-toggle="tab" data-bs-target="#cmm-sync" type="button">CMM Sync</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="sap-tab" data-bs-toggle="tab" data-bs-target="#sap-sync" type="button">SAP Sync</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="Collect-tab" data-bs-toggle="tab" data-bs-target="#collect-sync" type="button">Collect Sync</button>
+  </li>
+</ul>
+<div class="tab-content" id="mappingTabContent">
+	  <div class="tab-pane fade show active" id="bi-sync">
+		<form id="biForm" class="row g-3 mb-3">
+		  <div class="col-md-6">
+			 <div class="col-12">
+              <button class="btn btn-primary">Sync data</button>
+            </div>
+		  </div>
+		  <br>
+		  <!-- Table initially hidden -->
+  <div class="row" id="resultTable" style="">
+    <div class="col-12">
+      <table class="table table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Data Sync Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Data sync with BI application is Completed<span class="badge bg-success">Completed</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+		</form>
+	   
+	  </div>
+	<div class="tab-pane fade show active" id="cmm-sync">
+		<form id="cmmForm" class="row g-3 mb-3">
+		  <div class="col-md-6">
+			 <div class="col-12">
+              <button class="btn btn-primary">Sync data</button>
+            </div>
+		  </div>
+		  <br>
+		  <!-- Table initially hidden -->
+  <div class="row" id="resultTable" style="">
+    <div class="col-12">
+      <table class="table table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Data Sync Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Data sync with CMM application is Completed<span class="badge bg-success">Completed</span></td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+		</form>
+	   
+	  </div>
+	  <div class="tab-pane fade show active" id="sap-sync">
+		<form id="sapForm" class="row g-3 mb-3">
+		  <div class="col-md-6">
+			 <div class="col-12">
+              <button class="btn btn-primary">Sync data</button>
+            </div>
+		  </div>
+		  <br>
+		  <!-- Table initially hidden -->
+  <div class="row" id="resultTable" style="">
+    <div class="col-12">
+      <table class="table table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Data Sync Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Data sync with SAP application is Completed<span class="badge bg-danger">Not Completed</span></td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
+		</form>
+	   
+	  </div>
+	  <div class="tab-pane fade show active" id="collect-sync">
+		<form id="collectForm" class="row g-3 mb-3">
+		  <div class="col-md-6">
+			 
+		  </div>
+		  
+		</form>
+	   
+	  </div>
+</div>
+`;
+  const performanceTabContent = `
+      <ul class="nav nav-tabs mb-3" id="performanceTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="primary-tab" data-bs-toggle="tab" data-bs-target="#primary" type="button" role="tab">Primary Level Checking</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="secondary-tab" data-bs-toggle="tab" data-bs-target="#secondary" type="button" role="tab">Secondary Level Checking</button>
+        </li>      
+      </ul>
+      <div class="tab-content" id="performanceTabContent">
+        <div class="tab-pane fade show active" id="primary" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="section-title">Primary Level Checking</div><p>First round review by managers.</p>
+            </div>
+            <div class="col-12">
+              <button class="btn btn-primary">Export</button>
+            </div>
+          </form>
+           <table class="table table-hover">
+          <thead><tr><th>Emp ID</th><th>Name</th><th>Status</th></tr></thead>
+          <tbody>
+          <tr><td>EMP1001</td><td>Alice</td><td>Pending</td></tr>
+          <tr><td>EMP1002</td><td>Bob</td><td>Inprogress</td></tr>
+          </tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane fade" id="secondary" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="section-title">Secondary Level Checking</div><p>Final review by senior management.</p>
+            <div class="col-12">
+              <button class="btn btn-primary">Export</button>
+            </div>
+          </form>
+          <table class="table table-hover">
+        <thead><tr><th>Emp ID</th><th>Name</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>EMP1001</td><td>Alice</td><td>Pending</td></tr>
+          <tr><td>EMP1002</td><td>Bob</td><td>Inprogress</td></tr>
+        </tbody>
+      </table>
+        </div>
+      </div>
+      `;
+      const reportTabContent = `
+      <ul class="nav nav-tabs mb-3" id="reportTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="kraReport-tab" data-bs-toggle="tab" data-bs-target="#kraReport" type="button" role="tab">KRA Mapped/UnMapped</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="stopPaymentReport-tab" data-bs-toggle="tab" data-bs-target="#stopPaymentReport" type="button" role="tab">StopPayment</button>
+        </li>   
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="eligibilityReport-tab" data-bs-toggle="tab" data-bs-target="#eligibilityReport" type="button" role="tab">Eligibility Employee</button>
+        </li>   
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="deviationReport-tab" data-bs-toggle="tab" data-bs-target="#deviationReport" type="button" role="tab">Amount Deviation</button>
+        </li>   
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="departmentReport-tab" data-bs-toggle="tab" data-bs-target="#departmentReport" type="button" role="tab">Departmentwise</button>
+        </li>  
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="reviewerReport-tab" data-bs-toggle="tab" data-bs-target="#reviewerReport" type="button" role="tab">Reviewer</button>
+        </li>                
+      </ul>
+      <div class="tab-content" id="reportTabContent">
+        <div class="tab-pane fade show active" id="kraReport" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="section-title">KRA Mapped/Unmapped</div>
+            <div class="col-12">
+              <button class="btn btn-primary">Export</button>
+            </div>
+          </form>
+           <table class="table table-hover">
+          <thead><tr><th>Emp ID</th><th>Name</th><th>Status</th></tr></thead>
+          <tbody>
+          <tr><td>EMP1001</td><td>Alice</td><td>Mapped</td></tr>
+          <tr><td>EMP1002</td><td>Bob</td><td>Unmapped</td></tr>
+          </tbody>
+          </table>
+        </div>
+
+        <div class="tab-pane fade" id="stopPaymentReport" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="section-title">Stop Payment Report</div>
+            <div class="col-12">
+              <button class="btn btn-primary">Export</button>
+            </div>
+          </form>
+           <table class="table table-hover">
+        <thead><tr><th>Emp ID</th><th>Name</th><th>Reason</th></tr></thead>
+        <tbody>
+          <tr><td>EMP2001</td><td>Charlie</td><td>Resigned</td></tr>
+          <tr><td>EMP2002</td><td>David</td><td>On Leave</td></tr>
+        </tbody>
+      </table>
+        </div>
+        
+        <div class="tab-pane fade" id="eligibilityReport" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="section-title">Eligibility Report</div>
+            <div class="col-12">
+              <button class="btn btn-primary">Export</button>
+            </div>
+          </form>
+           <table class="table table-hover">
+        <thead><tr><th>Emp ID</th><th>Employee</th><th>Eligibility</th></tr></thead>
+        <tbody>
+          <tr><td>EMP3001</td><td>Eve</td><td>Eligible</td></tr>
+          <tr><td>EMP3002</td><td>Frank</td><td>Not Eligible</td></tr>
+        </tbody>
+      </table>
+        </div> 
+        <div class="tab-pane fade" id="deviationReport" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="section-title">Incentive Amount Deviation</div>
+            <div class="col-12">
+              <button class="btn btn-primary">Export</button>
+            </div>
+          </form>
+           <table class="table table-hover">
+        <thead><tr><th>Emp ID</th><th>Expected</th><th>Actual</th><th>Deviation</th></tr></thead>
+        <tbody>
+          <tr><td>EMP4001</td><td>₹10,000</td><td>₹9,500</td><td>-₹500</td></tr>
+          <tr><td>EMP4002</td><td>₹8,000</td><td>₹8,500</td><td>+₹500</td></tr>
+        </tbody>
+      </table>
+        </div>
+        <div class="tab-pane fade" id="departmentReport" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="section-title">Departmentwise Incentive</div>
+            <div class="col-12">
+              <button class="btn btn-primary">Export</button>
+            </div>
+          </form>
+           <table class="table table-hover">
+        <thead><tr><th>Department</th><th>Total Incentive</th></tr></thead>
+        <tbody>
+          <tr><td>Sales</td><td>₹2,00,000</td></tr>
+          <tr><td>Marketing</td><td>₹1,50,000</td></tr>
+        </tbody>
+      </table>
+        </div>
+        <div class="tab-pane fade" id="reviewerReport" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="section-title">Performance Reviewer</div>
+            <div class="col-12">
+              <button class="btn btn-primary">Export</button>
+            </div>
+          </form>
+           <table class="table table-hover">
+        <thead><tr><th>Reviewer</th><th>Employee</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>Manager A</td><td>Alice</td><td>Reviewed</td></tr>
+          <tr><td>Manager B</td><td>Bob</td><td>Pending</td></tr>
+        </tbody>
+      </table>
+        </div>
+
+
+
+      </div>
+      `;
+  const MailSettingContent = `
+      <ul class="nav nav-tabs mb-3" id="performanceTabs1" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="mailTemplate-tab" data-bs-toggle="tab" data-bs-target="#mailTemplate" type="button" role="tab">Mail Template</button>
+        </li>
+        
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="departmentwise-tab" data-bs-toggle="tab" data-bs-target="#departmentwise" type="button" role="tab">Departmentwise Mapping</button>
+        </li>   
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="reminderMail-tab" data-bs-toggle="tab" data-bs-target="#reminderMail" type="button" role="tab">Reminder & alert Mail</button>
+        </li>   
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="mailConfig-tab" data-bs-toggle="tab" data-bs-target="#mailConfig" type="button" role="tab">Mail Configuration</button>
+        </li>      
+      </ul>
+      <div class="tab-content" id="MailSettingContent">
+        <div class="tab-pane fade show active" id="mailTemplate" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="section-title">Mail Template</div>
+            </div>
+            <div class="col-12">
+              <div class="mb-3">
+        <label for="templateSelect" class="form-label">Select Template</label>
+        <select class="form-select" id="templateSelect" aria-label="Select Template">
+          <option selected>Choose...</option>
+          <option value="processing">Processing</option>
+          <option value="reward">Reward</option>
+          <option value="approval">Approval</option>
+          <!-- Add more options as needed -->
+        </select>
+      </div>
+
+      <!-- Template Editor -->
+      <div class="mb-3">
+        <label for="templateEditor" class="form-label">Template Editor</label>
+        <textarea class="form-control" id="templateEditor" rows="1" placeholder="Enter your template HTML or rich text here..."></textarea>
+      </div>
+
+      <!-- Upload New Template -->
+      <div class="mb-3">
+        <label for="uploadTemplate" class="form-label">Upload New Template</label>
+        <input class="form-control" type="file" id="uploadTemplate" accept=".html,.htm,.txt" />
+      </div>
+
+      <!-- Buttons -->
+      <div class="d-flex gap-2">
+        <button type="button" class="btn btn-secondary" id="previewBtn">Preview</button>
+        <button type="submit" class="btn btn-primary" id="saveBtn">Save</button>
+      </div>
+              </div>
+          </form>
+           
+        </div>
+
+        <div class="tab-pane fade" id="departmentwise" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="section-title">Departmentwise Mapping</div>
+            <div class="col-12">
+                    <div class="mb-3">
+            <label for="fromName" class="form-label">Default From Name</label>
+            <input type="text" class="form-control" id="fromName" placeholder="Enter default sender name" />
+          </div>
+
+          <!-- Default From Email -->
+          <div class="mb-3">
+            <label for="fromEmail" class="form-label">Default From Email</label>
+            <input type="email" class="form-control" id="fromEmail" placeholder="Enter default sender email" />
+          </div>
+
+          <!-- Reply-To Email -->
+          <div class="mb-3">
+            <label for="replyToEmail" class="form-label">Reply-To Email</label>
+            <input type="email" class="form-control" id="replyToEmail" placeholder="Enter reply-to email" />
+          </div>
+
+          <!-- BCC Email (optional) -->
+          <div class="mb-3">
+            <label for="bccEmail" class="form-label">BCC Email (optional)</label>
+            <input type="email" class="form-control" id="bccEmail" placeholder="Enter BCC email (optional)" />
+          </div>
+
+          <!-- Enable Per-Department Sender -->
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" id="enablePerDeptSender" />
+            <label class="form-check-label" for="enablePerDeptSender">
+              Enable Per-Department Sender?
+            </label>
+          </div>
+
+          <!-- Department-Specific Sender Settings Table -->
+          <div id="departmentSenderSettings" class="d-none">
+            <div class="mb-3">
+              <label for="departmentSelect" class="form-label">Select Department</label>
+              <select class="form-select" id="departmentSelect">
+                <option selected disabled>Choose Department...</option>
+                <option value="processing">Processing</option>
+                <option value="reward">Reward</option>
+                <option value="approval">Approval</option>
+                <!-- Add more as needed -->
+              </select>
+            </div>
+
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Department</th>
+                  <th>From Name</th>
+                  <th>From Email</th>
+                  <th>Reply-To Email</th>
+                  <th>BCC Email (optional)</th>
+                </tr>
+              </thead>
+              <tbody id="deptSenderTableBody">
+                <!-- Rows get added dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Save Button -->
+          <button type="submit" class="btn btn-primary">Save</button>
+
+            </div>
+          </form>
+         
+        </div>
+
+        <div class="tab-pane fade" id="reminderMail" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="section-title">Reminder and alert mails</div>
+            </div>
+            <div class="col-12">
+               <!-- Enable Reminder Emails -->
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="enableReminderEmails" checked />
+                <label class="form-check-label" for="enableReminderEmails">Enable Reminder Emails</label>
+              </div>
+            
+              <!-- Reminder Interval (Days) -->
+              <div class="mb-3">
+                <label for="reminderInterval" class="form-label">Reminder Interval (Days)</label>
+                <input type="number" class="form-control" id="reminderInterval" min="1" placeholder="Enter days interval" />
+              </div>
+            
+              <!-- Max Reminder Attempts -->
+              <div class="mb-3">
+                <label for="maxAttempts" class="form-label">Max Reminder Attempts</label>
+                <input type="number" class="form-control" id="maxAttempts" min="1" placeholder="Enter max attempts" />
+              </div>
+            
+              <!-- Time of Day to Send -->
+              <div class="mb-3">
+                <label for="timeOfDay" class="form-label">Time of Day to Send</label>
+                <input type="time" class="form-control" id="timeOfDay" />
+              </div>
+            
+              <!-- Exclude Weekends -->
+              <div class="form-check form-switch mb-3">
+                <input class="form-check-input" type="checkbox" id="excludeWeekends" />
+                <label class="form-check-label" for="excludeWeekends">Exclude Weekends</label>
+              </div>
+            
+              <!-- Alert on Inactivity (Days) -->
+              <div class="mb-3">
+                <label for="alertOnInactivity" class="form-label">Alert on Inactivity (Days)</label>
+                <input type="number" class="form-control" id="alertOnInactivity" min="1" placeholder="Enter days" />
+              </div>
+            
+              <!-- Alert Recipients -->
+              <div class="mb-3">
+                <label for="alertRecipients" class="form-label">Alert Recipients</label>
+                <input type="text" class="form-control" id="alertRecipients" placeholder="Enter alert recipients (comma separated or multi-select)" />
+              </div>
+            
+              <!-- Add Custom Alert Rule Button -->
+              <button type="button" class="btn btn-outline-primary" id="addAlertRuleBtn">Add Custom Alert Rule</button>
+    
+            </div>
+          </form>
+          
+        </div>
+
+
+
+        <div class="tab-pane fade" id="mailConfig" role="tabpanel">
+          <form class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="section-title">Mail Configuration</div>
+            </div>
+            <div class="col-12">
+              <!-- SMTP Host -->
+      <div class="mb-3">
+        <label for="smtpHost" class="form-label">SMTP Host</label>
+        <input type="text" class="form-control" id="smtpHost" placeholder="Enter SMTP host" />
+      </div>
+
+      <!-- SMTP Port -->
+      <div class="mb-3">
+        <label for="smtpPort" class="form-label">SMTP Port</label>
+        <input type="number" class="form-control" id="smtpPort" placeholder="Enter SMTP port" />
+      </div>
+
+      <!-- Encryption -->
+      <div class="mb-3">
+        <label for="encryption" class="form-label">Encryption</label>
+        <select class="form-select" id="encryption">
+          <option value="none" selected>None</option>
+          <option value="ssl">SSL</option>
+          <option value="tls">TLS</option>
+        </select>
+      </div>
+
+      <!-- Requires Authentication -->
+      <div class="form-check form-switch mb-3">
+        <input class="form-check-input" type="checkbox" id="requiresAuth" />
+        <label class="form-check-label" for="requiresAuth">Requires Authentication</label>
+      </div>
+
+      <!-- Username -->
+      <div class="mb-3">
+        <label for="username" class="form-label">Username</label>
+        <input type="text" class="form-control" id="username" placeholder="Enter username" />
+      </div>
+
+      <!-- Password with Show/Hide toggle -->
+      <div class="mb-3 position-relative">
+        <label for="password" class="form-label">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Enter password" />
+        <!-- <button type="button" class="btn btn-outline-secondary btn-sm position-absolute top-50 end-0 translate-middle-y me-2" id="togglePassword"> -->
+          
+        <!-- </button> -->
+      </div>
+
+      <!-- Test Connection Button -->
+      <button type="button" class="btn btn-primary" id="testConnectionBtn">Test Connection</button>
+   
+            </div>
+          </form>
+          
+        </div>
+
+
+      </div>
+      `;
+ 
+    const contentTitle = document.getElementById("contentTitle");
+    const dynamicContent = document.getElementById("dynamicContent");
+    const sidebarAccordion = document.getElementById("sidebarAccordion");
+
+    // Listen to Masters and Settings accordion button clicks
+    sidebarAccordion.querySelectorAll("button[data-menu]").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const menu = this.getAttribute("data-menu");
+        if (menu === "masters") {
+          contentTitle.textContent = "Masters";
+          dynamicContent.innerHTML = mastersTabsContent;
+        } else if (menu === "settings") {
+          contentTitle.textContent = "Settings";
+          dynamicContent.innerHTML = settingsTabsContent;
+        }
+		 if(key==="mapping") attachMappingLogic();
+		 if(key==="bulk") attachBulkLogic();
+      });
+    });
+
+    // Sidebar main nav non-accordion links
+    document.querySelectorAll('.sidebar ul.nav.flex-column > li > a.nav-link').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        let key = item.getAttribute('data-content');
+        contentTitle.textContent =
+          key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
+        dynamicContent.innerHTML = contentMap[key] || "<p>Coming Soon</p>";
+
+        bootstrap.Collapse.getInstance(document.getElementById("collapseMasters"))?.hide();
+        bootstrap.Collapse.getInstance(document.getElementById("collapseSettings"))?.hide();
+
+        // If dashboard, load charts
+        if (key === "dashboard") {
+          setTimeout(initCharts, 50);
+        }
+		 
+      });
+    });
+
+    // Map for non-accordion menus
+    const contentMap = {
+      dashboard: `
+        <h5>Analytics</h5>
+        <div class="row mb-4">
+          <div class="col-md-6 mb-3">
+            <canvas id="barChart"></canvas>
+          </div>
+          <div class="col-md-6 mb-3">
+            <canvas id="pieChart"></canvas>
+          </div>
+          <div class="col-md-6 mb-3">
+            <canvas id="lineChart"></canvas>
+          </div>
+          <div class="col-md-6 mb-3">
+            <canvas id="doughnutChart"></canvas>
+          </div>
+        </div>
+
+        <h5>Overview</h5>
+        <div class="row">
+          <div class="col-sm-4">
+            <div class="card p-3 mb-3"><span class="fs-6">Policies</span><div class="display-6 fw-bold">8</div></div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card p-3 mb-3"><span class="fs-6">KRAs</span><div class="display-6 fw-bold">16</div></div>
+          </div>
+          <div class="col-sm-4">
+            <div class="card p-3 mb-3"><span class="fs-6">Eligible Employees</span><div class="display-6 fw-bold">74</div></div>
+          </div>
+        </div>
+      `,
+  mapping: mappingTabsContent,
+  bulk: bulkTabsContent,
+  master:mastersTabsContent,
+  settings:settingsTabsContent,
+  datasync:datasync,
+  mail: MailSettingContent,
+  review:performanceTabContent ,
+  reports:reportTabContent
+	    
+    };
+
+    function initCharts() {
+      // Bar Chart
+      new Chart(document.getElementById("barChart"), {
+        type: "bar",
+        data: {
+          labels: ["Q1", "Q2", "Q3", "Q4"],
+          datasets: [{
+            label: "Revenue",
+            data: [120, 150, 180, 200],
+            backgroundColor: "#0d6efd"
+          }]
+        }
+      });
+
+      // Pie Chart
+      new Chart(document.getElementById("pieChart"), {
+        type: "pie",
+        data: {
+          labels: ["Policies", "KRAs", "Employees"],
+          datasets: [{
+            data: [8, 16, 74],
+            backgroundColor: ["#0d6efd", "#198754", "#ffc107"]
+          }]
+        }
+      });
+
+      // Line Chart
+      new Chart(document.getElementById("lineChart"), {
+        type: "line",
+        data: {
+          labels: ["Jan", "Feb", "Mar", "Apr"],
+          datasets: [{
+            label: "Performance",
+            data: [65, 75, 70, 85],
+            borderColor: "#dc3545",
+            fill: false,
+            tension: 0.3
+          }]
+        }
+      });
+
+      // Doughnut Chart
+      new Chart(document.getElementById("doughnutChart"), {
+        type: "doughnut",
+        data: {
+          labels: ["Completed", "Pending", "In Progress"],
+          datasets: [{
+            data: [40, 20, 30],
+            backgroundColor: ["#198754", "#ffc107", "#0dcaf0"]
+          }]
+        }
+      });
+    }
+	
+// Mapping Logic
+function attachMappingLogic() {
+  const deptTabs = document.getElementById('mappingTabs');
+  const activeTab = deptTabs.querySelector('.nav-link.active');
+  if (activeTab && activeTab.id === 'dept-mapping-tab') {
+    attachDeptMappingLogic();
+  }
+
+  deptTabs.addEventListener('shown.bs.tab', function (e) {
+    if (e.target.id === 'dept-mapping-tab') {
+      attachDeptMappingLogic();
+    }
+  });
+
+  const deptSelect = document.getElementById("departmentSelect");
+  const kraInputDiv = document.getElementById("kraInputDiv");
+  const kraForm = document.getElementById("kraForm");
+  const kraTable = document.getElementById("kraTable").querySelector("tbody");
+
+  deptSelect?.addEventListener("change", () => {
+    kraInputDiv.classList.toggle("d-none", !deptSelect.value);
+  });
+
+  kraForm?.addEventListener("submit", e => {
+    e.preventDefault();
+    const kra = document.getElementById("kraInput").value;
+    if(deptSelect.value && kra) {
+      kraTable.insertAdjacentHTML("beforeend", `<tr><td>${deptSelect.value}</td><td>${kra}</td></tr>`);
+      document.getElementById("kraTable").classList.remove("d-none");
+      kraForm.reset(); kraInputDiv.classList.add("d-none");
+    }
+  });
+
+  // Reviewer Mapping
+  const reviewerDept = document.getElementById("reviewerDeptSelect");
+  const reviewerCxo = document.getElementById("reviewerCxoSelect");
+  const reviewerForm = document.getElementById("reviewerForm");
+  const reviewerTable = document.getElementById("reviewerTable").querySelector("tbody");
+
+  const cxos = { Sales:["CXO A","CXO B"], HR:["CXO C"], IT:["CXO D"], Finance:["CXO E"] };
+
+  reviewerDept?.addEventListener("change", () => {
+    reviewerCxo.innerHTML = `<option value="">-- Select CXO --</option>`;
+    if(reviewerDept.value) cxos[reviewerDept.value].forEach(c=> reviewerCxo.insertAdjacentHTML("beforeend", `<option>${c}</option>`));
+  });
+
+  reviewerForm?.addEventListener("submit", e => {
+    e.preventDefault();
+    if(reviewerDept.value && reviewerCxo.value) {
+      reviewerTable.insertAdjacentHTML("beforeend", `<tr><td>${reviewerDept.value}</td><td>${reviewerCxo.value}</td></tr>`);
+      document.getElementById("reviewerTable").classList.remove("d-none");
+      reviewerForm.reset();
+    }
+  });
+}
+
+// Department-wise Mapping Logic
+function attachDeptMappingLogic() {
+  const deptSelect = document.getElementById("deptEbitdaSelect");
+  const ebitdaInput = document.getElementById("ebitdaInput");
+  const ebitdaTableBody = document.getElementById("ebitdaTable").querySelector("tbody");
+  
+  const allDepartments = ["Sales", "HR", "IT", "Finance"];
+  
+  // Initial population of the table with 0%
+  function resetTable() {
+    ebitdaTableBody.innerHTML = '';
+    allDepartments.forEach(dept => {
+      const row = `<tr><td>${dept}</td><td>0%</td></tr>`;
+      ebitdaTableBody.insertAdjacentHTML('beforeend', row);
+    });
+  }
+  
+  resetTable();
+  
+  deptSelect?.addEventListener("change", () => {
+    ebitdaInput.disabled = !deptSelect.value;
+    ebitdaInput.value = '';
+    if (deptSelect.value) {
+      const remainingDepts = allDepartments.filter(d => d !== deptSelect.value);
+      const remainingPct = 100 / (remainingDepts.length + 1);
+      
+      ebitdaTableBody.innerHTML = '';
+      allDepartments.forEach(dept => {
+        const percentage = (dept === deptSelect.value) ? 0 : remainingPct;
+        const row = `<tr><td>${dept}</td><td>${percentage.toFixed(2)}%</td></tr>`;
+        ebitdaTableBody.insertAdjacentHTML('beforeend', row);
+      });
+    } else {
+      resetTable();
+    }
+  });
+  
+  ebitdaInput?.addEventListener("input", () => {
+    let enteredPct = parseFloat(ebitdaInput.value);
+    
+    if (isNaN(enteredPct) || enteredPct < 0) {
+      enteredPct = 0;
+    } else if (enteredPct > 100) {
+      enteredPct = 100;
+      ebitdaInput.value = 100;
+    }
+    
+    const selectedDept = deptSelect.value;
+    const remainingPct = 100 - enteredPct;
+    const remainingDepts = allDepartments.filter(dept => dept !== selectedDept);
+    const dividedPct = remainingDepts.length > 0 ? remainingPct / remainingDepts.length : 0;
+    
+    ebitdaTableBody.innerHTML = '';
+    allDepartments.forEach(dept => {
+      let percentage;
+      if (dept === selectedDept) {
+        percentage = enteredPct;
+      } else {
+        percentage = dividedPct;
+      }
+      const row = `<tr><td>${dept}</td><td>${percentage.toFixed(2)}%</td></tr>`;
+      ebitdaTableBody.insertAdjacentHTML('beforeend', row);
+    });
+  });
+}
+
+// Bulk Logic
+function attachBulkLogic() {
+  document.querySelectorAll(".bulkForm").forEach(form => {
+    const dropzone = form.querySelector(".dropzone");
+    const fileInput = form.querySelector(".fileInput");
+    const downloadTemplate = form.querySelector(".downloadTemplate");
+
+    dropzone.addEventListener("click", () => fileInput.click());
+    dropzone.addEventListener("dragover", e => { e.preventDefault(); dropzone.classList.add("dragover"); });
+    dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+    dropzone.addEventListener("drop", e => { e.preventDefault(); dropzone.classList.remove("dragover"); fileInput.files = e.dataTransfer.files; });
+
+    downloadTemplate.addEventListener("click", () => {
+      const link = document.createElement("a"); link.href="template.xlsx"; link.download="Template.xlsx"; link.click();
+    });
+
+    form.addEventListener("submit", e => { e.preventDefault(); alert("File uploaded for department: "+form.querySelector(".bulkDeptSelect").value); form.reset(); });
+  });
+}
+  </script>
+</body>
+</html>
