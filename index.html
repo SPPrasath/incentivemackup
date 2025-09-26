@@ -659,16 +659,119 @@ const datasync = `
               <div class="section-title">Primary Level Checking</div><p>First round review by managers.</p>
             </div>
             <div class="col-12">
-              <button class="btn btn-primary">Export</button>
+              <div class="row mb-3">
+        <div class="col-md-3">
+          <label class="form-label">Overall Score</label>
+          <input type="text" class="form-control" id="overallScore" readonly value="85.90%" />
+        </div>
+        <div class="col-md-3">
+          <label for="employeeName" class="form-label">Employee Name</label>
+          <input type="text" class="form-control" id="employeeName" placeholder="Employee Name" required />
+        </div>
+        <div class="col-md-2">
+          <label for="employeeId" class="form-label">Employee ID</label>
+          <input type="text" class="form-control" id="employeeId" placeholder="Employee ID" />
+        </div>
+        <div class="col-md-2">
+          <label for="department" class="form-label">Department</label>
+          <input type="text" class="form-control" id="department" placeholder="Department" />
+        </div>
+        <div class="col-md-2">
+          <label for="reviewer" class="form-label">Reviewer</label>
+          <input type="text" class="form-control" id="reviewer" placeholder="Reviewer" />
+        </div>
+      </div>
+
+     
+
+      <table class="table table-bordered align-middle">
+        <thead>
+          <tr>
+            <th>KRA</th>
+            <th>Target</th>
+            <th>Weight (%)</th>
+            <th>Score (0–100)</th>
+            <th>Weighted</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Revenue Target <br/><small>Achieve quarterly sales</small></td>
+            <td>$250,000</td>
+            <td><input type="number" class="form-control weight-input" min="0" max="100" value="34.00" /></td>
+            <td><input type="number" class="form-control score-input" min="0" max="100" value="85.00" /></td>
+            <td class="weighted-score text-end">0.00</td>
+          </tr>
+          <tr>
+            <td>New Accounts <br/><small>Net new customers</small></td>
+            <td>30 accounts</td>
+            <td><input type="number" class="form-control weight-input" min="0" max="100" value="22.50" /></td>
+            <td><input type="number" class="form-control score-input" min="0" max="100" value="90.00" /></td>
+            <td class="weighted-score text-end">0.00</td>
+          </tr>
+          <tr>
+            <td>Customer Satisfaction <br/><small>CSAT survey average</small></td>
+            <td>≥4.2/5</td>
+            <td><input type="number" class="form-control weight-input" min="0" max="100" value="15.60" /></td>
+            <td><input type="number" class="form-control score-input" min="0" max="100" value="80.00" /></td>
+            <td class="weighted-score text-end">0.00</td>
+          </tr>
+          <tr>
+            <td>Process & Teamwork <br/><small>Collaboration, ops adherence</small></td>
+            <td>N/A</td>
+            <td><input type="number" class="form-control weight-input" min="0" max="100" value="13.80" /></td>
+            <td><input type="number" class="form-control score-input" min="0" max="100" value="88.00" /></td>
+            <td class="weighted-score text-end">0.00</td>
+          </tr>
+          <tr>
+            <td>Learning & Compliance <br/><small>Training completion & policy</small></td>
+            <td>100% mandatory</td>
+            <td><input type="number" class="form-control weight-input" min="0" max="100" value="0.00" /></td>
+            <td><input type="number" class="form-control score-input" min="0" max="100" value="0.00" /></td>
+            <td class="weighted-score text-end">0.00</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th colspan="2" class="text-end">Total Weight:</th>
+            <th><span id="totalWeight">100.00</span>%</th>
+            <th></th>
+            <th><span id="finalWeightedScore">85.90</span></th>
+          </tr>
+        </tfoot>
+      </table>
+
+      <!-- Calculate Button -->
+      <div class="mb-3">
+        <button type="button" id="calculateBtn" class="btn btn-primary">Calculate</button>
+      </div>
+
+      <div class="mb-3">
+        <label for="reviewerComments" class="form-label">Reviewer Comments</label>
+        <textarea class="form-control" id="reviewerComments" rows="3"></textarea>
+      </div>
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <label for="reviewerSignature" class="form-label">Reviewer Signature</label>
+          <input type="text" class="form-control" id="reviewerSignature" placeholder="Signature" />
+        </div>
+        <div class="col-md-6">
+          <label for="employeeAcknowledgement" class="form-label">Employee Acknowledgement</label>
+          <input type="text" class="form-control" id="employeeAcknowledgement" placeholder="Employee Name" />
+        </div>
+      </div>
+
+      <small class="text-muted d-block mb-4">
+        Generated: 9/26/2025, 3:21:53 PM
+      </small>
+
+      <div>
+        <button type="button" class="btn btn-outline-secondary me-2" onclick="window.print()">Print / Save PDF</button>
+        <button type="button" class="btn btn-outline-secondary" id="downloadHtmlBtn">Save</button>
+      </div>
             </div>
           </form>
-           <table class="table table-hover">
-          <thead><tr><th>Emp ID</th><th>Name</th><th>Status</th></tr></thead>
-          <tbody>
-          <tr><td>EMP1001</td><td>Alice</td><td>Pending</td></tr>
-          <tr><td>EMP1002</td><td>Bob</td><td>Inprogress</td></tr>
-          </tbody>
-          </table>
         </div>
 
         <div class="tab-pane fade" id="secondary" role="tabpanel">
