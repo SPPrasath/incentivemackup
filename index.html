@@ -6,6 +6,15 @@
   <title>Incentive Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+
   <style>
     body {
       background: #f7fafc;
@@ -73,8 +82,82 @@
     border: none !important;
     outline: none !important;
 }
-
-
+  </style>
+  <!-- Guardian Style -->
+  <style>
+    .gradient-card {
+      background: linear-gradient(120deg, #7c3aed 60%, #9461ff 100%);
+      color: #fff;
+      border-radius: 8px;
+      margin-bottom: 24px;
+      border: none;
+      padding: 28px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 2rem;
+      position: relative;
+      cursor: pointer;
+    }
+    .type-label {
+      font-size: 2.0rem;
+      font-weight: 500;
+      margin-right: 30px;
+      letter-spacing: 0.05em;
+    }
+    .slab-tag {
+      background: rgba(55, 41, 116, 0.25);
+      border-radius: 6px;
+      color: #fff;
+      font-size: 1.1rem;
+      padding: 3px 16px;
+      margin-left: 8px;
+      font-weight: 400;
+      display: inline-block;
+    }
+    .dropdown-arrow {
+      font-size: 2rem;
+      color: #fff;
+      opacity: 0.85;
+      transition: transform 0.3s;
+    }
+    .accordion-button:not(.collapsed) .dropdown-arrow {
+      transform: rotate(180deg);
+    }
+    .accordion-button {
+     
+      box-shadow: none;
+      border: none;
+      padding: 0;
+    }
+    .accordion-item {
+      border: none;
+      background: none;
+    }
+    .accordion-collapse {
+      border-radius: 0 0 8px 8px;
+    }
+    .vcs-e-title {
+      font-size: 2.4rem;
+      color: #3753eb;
+      font-weight: 500;
+      font-family: sans-serif;
+      margin-bottom: 0;
+      letter-spacing: 0.02em;
+    }
+    .dotted-line {
+      border-bottom: 2px dotted #c3c3c3;
+      width: 10em;
+      margin-bottom: 24px;
+      margin-top: 8px;
+    }
+    @media(max-width: 450px){
+      .type-label,
+      .gradient-card {
+        font-size: 1.2rem;
+        padding: 18px 10px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -103,6 +186,10 @@
 		  <li>
             <a href="#" class="nav-link" data-content="settings"
               ><i class="bi bi-gear me-2"></i> Settings</a>
+          </li>
+		  <li>
+            <a href="#" class="nav-link" data-content="mail"
+              ><i class="bi bi-envelope"></i>Mail Settings</a>
           </li>
          
           <li>
@@ -144,12 +231,20 @@
       </main>
     </div>
    </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script>
+<script>
+  $(document).ready(function () {
+    $('#documentTable').DataTable({
+      paging: true,       // Enable pagination
+      searching: true,    // Enable filter/search box
+      ordering: true,     // Enable column sorting
+      lengthChange: true, // Allow user to change rows per page
+      pageLength: 5       // Default rows per page
+    });
+  });
+</script>
  
+  <script>
+   
    const mastersTabsContent = `
       <ul class="nav nav-tabs mb-3" id="mastersTabs" role="tablist">
         
@@ -164,137 +259,559 @@
       <div class="tab-content" id="mastersTabContent">
         
         <div class="tab-pane fade show active" id="kra" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="col-md-6">
-              <label class="form-label">KRA Describtion</label>
-              <input type="text" class="form-control" placeholder="Enter KRA " />
-            </div>
-            
-            <div class="col-12">
-              <button class="btn btn-primary">Add KRA</button>
-            </div>
-          </form>
-          <table class="table table-hover align-middle">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>KRA Title</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Sales Growth</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Customer Retention</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+  <form class="row g-3 mb-4">
+    <div class="col-md-6">
+      <label class="form-label">KRA Description</label>
+      <input type="text" class="form-control" placeholder="Enter KRA" />
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary">Add KRA</button>
+    </div>
+  </form>
+
+  <table id="kraTable" class="table table-hover align-middle table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>KRA Title</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Sales Growth</td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary me-1" title="Edit">
+    <i class="bi bi-pencil-square"></i>
+  </button>
+  <button class="btn btn-sm btn-outline-danger me-1" title="Delete">
+    <i class="bi bi-trash"></i>
+  </button>
+  <button class="btn btn-sm btn-outline-info" title="History">
+    <i class="bi bi-clock-history"></i>
+  </button>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Customer Retention</td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary me-1" title="Edit">
+    <i class="bi bi-pencil-square"></i>
+  </button>
+  <button class="btn btn-sm btn-outline-danger me-1" title="Delete">
+    <i class="bi bi-trash"></i>
+  </button>
+  <button class="btn btn-sm btn-outline-info" title="History">
+    <i class="bi bi-clock-history"></i>
+  </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
         <div class="tab-pane fade" id="document" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="col-md-8">
-              <label class="form-label">Upload Document</label>
-              <input type="file" class="form-control" />
-            </div>
-            <div class="col-md-4 align-self-end">
-              <button class="btn btn-primary mt-2">Upload</button>
-            </div>
-          </form>
-          <table class="table table-hover align-middle">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>Document Name</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Appraisal.pdf</td>
-                <td>Uploaded</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Contract.docx</td>
-                <td>Pending</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+  <form class="row g-3 mb-4">
+    <!-- Department Dropdown -->
+    <div class="col-md-4">
+      <label class="form-label">Select Department</label>
+      <select class="form-select">
+        <option selected disabled>Choose Department</option>
+        <option value="sales">Sales</option>
+        <option value="marketing">Marketing</option>
+        <option value="hr">HR</option>
+        <option value="finance">Finance</option>
+      </select>
+    </div>
+
+    <!-- File Upload -->
+    <div class="col-md-4">
+      <label class="form-label">Upload Document</label>
+      <input type="file" class="form-control" />
+    </div>
+
+    <!-- Upload Button -->
+    <div class="col-md-4 align-self-end">
+      <button class="btn btn-primary mt-2">Upload</button>
+	  <button type="button" class="btn btn-sm btn-info position-relative" data-bs-toggle="popover" data-bs-html="true" title="Upload Notes" data-bs-content="
+    <ul class='mb-0'>
+      <li><b>Only PDF files are allowed.</b></li>
+      <li><b>Maximum upload size is 5 MB.</b></li>
+    </ul>
+  ">
+    <i class="bi bi-info-circle"></i> 
+  </button>
+    </div>
+  </form>
+
+  <!-- Document Table -->
+  <table id="documentTable" class="table table-hover align-middle table-striped table-bordered">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Department</th>
+      <th>Document Name</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>HR</td>
+      <td>Appraisal.pdf</td>
+      <td class="text-center">
+        <button class="btn btn-sm btn-outline-danger me-1" title="Delete">
+          <i class="bi bi-trash"></i>
+        </button>
+      </td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Finance</td>
+      <td>Contract.pdf</td>
+      <td class="text-center">
+        <button class="btn btn-sm btn-outline-danger me-1" title="Delete">
+          <i class="bi bi-trash"></i>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
       </div>
     `;
 
     const settingsTabsContent = `
      <!-- Top-level Tabs -->
 <ul class="nav nav-tabs" id="settingsParentTabs" role="tablist">
-  <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="marketing-parent" data-bs-toggle="tab" data-bs-target="#marketing-group" type="button" role="tab">Marketing Settings</button>
+<li class="nav-item" role="presentation">
+    <button class="nav-link active" id="general-parent" data-bs-toggle="tab" data-bs-target="#general-group" type="button" role="tab">General Settings</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="general-parent" data-bs-toggle="tab" data-bs-target="#general-group" type="button" role="tab">General Settings</button>
+    <button class="nav-link " id="marketing-parent" data-bs-toggle="tab" data-bs-target="#marketing-group" type="button" role="tab">Marketing Settings</button>
   </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="mail-parent" data-bs-toggle="tab" data-bs-target="#mail-group" type="button" role="tab">Mail Settings</button>
-  </li>
+  
+   
 </ul>
 
 <!-- Second-level Tabs -->
 <div class="tab-content mt-2">
   
   <!-- Marketing Settings -->
-  <div class="tab-pane fade show active" id="marketing-group" role="tabpanel">
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <button class="nav-link active" id="payout-tab" data-bs-toggle="tab" data-bs-target="#payout" type="button" role="tab">Policy role settings</button>
-      </li>
-	  <li class="nav-item">
-        <button class="nav-link" id="process-evaluation-tab" data-bs-toggle="tab" data-bs-target="#process-evaluation" type="button" role="tab">Process & Evaluation period</button>
-      </li>
-    </ul>
+  <div class="container py-4 tab-pane fade " id="marketing-group" role="tabpanel">
+    <div class="accordion" id="vcsAccordion">
+      <!-- Type 1 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button gradient-card collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#policyrolesetting" aria-expanded="false" aria-controls="policyrolesetting">
+              
+              <span class="slab-tag">Policy Role Settings</span>
+          </button>
+        </h2>
+        <div id="policyrolesetting" class="accordion-collapse collapse" data-bs-parent="#vcsAccordion">
+  <div class="card card-body">
+    <form class="row g-3 mb-4">
+      
+      <!-- Department Dropdown -->
+      <div class="col-md-4">
+        <label class="form-label">Select Department</label>
+        <select class="form-select">
+          <option selected disabled>Choose Department</option>
+          <option value="it">IT</option>
+          <option value="marketing">Marketing</option>
+          <option value="hr">HR</option>
+          <option value="finance">Finance</option>
+        </select>
+      </div>
+
+      <!-- Role Dropdown -->
+      <div class="col-md-4">
+        <label class="form-label">Select Role</label>
+        <select class="form-select">
+          <option selected disabled>Choose Role</option>
+          <option value="bd">BD</option>
+          <option value="tl">TL</option>
+          <option value="cse">CSE</option>
+          <option value="manager">Manager</option>
+        </select>
+      </div>
+
+      <!-- Description -->
+      <div class="col-md-4">
+        <label for="recurring_description" class="form-label">Description</label>
+        <input type="text" class="form-control" id="recurring_description" maxlength="250" placeholder="Enter description">
+      </div>
+
+      <!-- Eligible Days -->
+      <div class="col-md-4">
+        <label for="recurring_eligible_days" class="form-label">Eligible Days</label>
+        <input type="number" class="form-control" id="recurring_eligible_days" placeholder="Enter days">
+      </div>
+
+      <!-- Percentage -->
+      <div class="col-md-4">
+        <label for="recurring_percentage" class="form-label">Percentage</label>
+        <input type="number" class="form-control" id="recurring_percentage" placeholder="Enter %">
+      </div>
+
+      <!-- Save Button -->
+      <div class="col-12 text-end">
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-save"></i> Save
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+      </div>
+
+      <!-- Type 2 -->
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button class="accordion-button gradient-card collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#processevaluatesetting" aria-expanded="false" aria-controls="processevaluatesetting">
+              <span class="slab-tag">Process and Evaluation period</span>
+          </button>
+        </h2>
+        <div id="processevaluatesetting" class="accordion-collapse collapse" data-bs-parent="#vcsAccordion">
+          <div class="card card-body">
+             <form class="row g-3 mb-4">
+      
+      <!-- Department Dropdown -->
+      <div class="col-md-4">
+        <label class="form-label">Select Department</label>
+        <select class="form-select">
+          <option selected disabled>Choose Department</option>
+          <option value="it">IT</option>
+          <option value="marketing">Marketing</option>
+          <option value="hr">HR</option>
+          <option value="finance">Finance</option>
+        </select>
+      </div>
+
+      <!-- Performance Dropdown -->
+      <div class="col-md-4">
+        <label class="form-label">Performance Duration</label>
+        <select class="form-select">
+          <option selected disabled>Choose Duration</option>
+          <option value="bd">2 Months</option>
+          <option value="tl">4 Months</option>
+          <option value="cse">6 Months</option>
+          <option value="manager">12 Months</option>
+        </select>
+      </div>
+		<!-- Processing Intravel Dropdown -->
+      <div class="col-md-4">
+        <label class="form-label">Processing Intravel</label>
+        <select class="form-select">
+          <option selected disabled>Choose Intravel</option>
+          <option value="bd">1 Months</option>
+          <option value="tl">2 Months</option>
+          <option value="cse">3 Months</option>
+          <option value="manager">4 Months</option>
+        </select>
+      </div>
+	  
+	  <!-- Processing Dropdown -->
+      <div class="col-md-4">
+        <label class="form-label">Processing Duration</label>
+        <select class="form-select">
+          <option selected disabled>Choose Duration</option>
+		  <option value="bd">2 Months</option>
+          <option value="tl">3 Months</option>
+          <option value="cse">6 Months</option>
+          <option value="manager">12 Months</option>
+          
+        </select>
+      </div>
+       
+
+      <!-- Save Button -->
+      <div class="col-12 text-end">
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-save"></i> Save
+        </button>
+      </div>
+
+    </form>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- General Settings -->
-  <div class="tab-pane fade" id="general-group" role="tabpanel">
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <button class="nav-link active" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab">Review Period</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" id="ex-incentiv-department-tab" data-bs-toggle="tab" data-bs-target="#ex-incentiv-department" type="button" role="tab">Exclude Incentive Department</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" id="fy-ebitda-tab" data-bs-toggle="tab" data-bs-target="#fy-ebitda" type="button" role="tab">FY EBITDA</button>
-      </li>
-	   <li class="nav-item">
-        <button class="nav-link" id="dept-ebitda-tab" data-bs-toggle="tab" data-bs-target="#dept-ebitda" type="button" role="tab">Department wise EBITDA</button>
-      </li>
-	  <li class="nav-item">
-        <button class="nav-link" id="stop-exclude-tab" data-bs-toggle="tab" data-bs-target="#stop-exclude-incentive" type="button" role="tab">Stop and waiting period Employee</button>
-      </li>
-    </ul>
-  </div>
+  <div class="container py-4 tab-pane fade show active" id="general-group">
+  <div class="accordion" id="vcsAccordion">
 
-  <!-- Mail Settings -->
-  <div class="tab-pane fade" id="mail-group" role="tabpanel">
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <button class="nav-link active" id="template-tab" data-bs-toggle="tab" data-bs-target="#template" type="button" role="tab">Mail Template</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" id="mail-tab" data-bs-toggle="tab" data-bs-target="#mail" type="button" role="tab">Department wise Mail Template</button>
-      </li>
-	  <li class="nav-item">
-        <button class="nav-link" id="alert-reminder-tab" data-bs-toggle="tab" data-bs-target="#alert-reminder" type="button" role="tab">Alert Reminder Mail</button>
-      </li>
-	  <li class="nav-item">
-        <button class="nav-link" id="mail-config-tab" data-bs-toggle="tab" data-bs-target="#mail-config" type="button" role="tab">Mail Config</button>
-      </li>
-    </ul>
+    <!-- Type 1 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingFyEbitda">
+        <button class="accordion-button gradient-card collapsed" type="button" 
+                data-bs-toggle="collapse" data-bs-target="#fyebitda" 
+                aria-expanded="false" aria-controls="fyebitda">
+          <span class="slab-tag">FY EBITDA</span>
+        </button>
+      </h2>
+      <div id="fyebitda" class="accordion-collapse collapse" 
+           aria-labelledby="headingFyEbitda" data-bs-parent="#vcsAccordion">
+        <div class="card card-body">
+          <form class="row g-3">
+            <!-- FY Dropdown -->
+            <div class="col-md-4">
+              <label class="form-label">Financial Year</label>
+              <select class="form-select">
+                <option selected disabled>Choose FY</option>
+                <option value="2024-2025">FY 2024-2025</option>
+                <option value="2025-2026">FY 2025-2026</option>
+              </select>
+            </div>
+
+            <!-- EBITDA Amount -->
+            <div class="col-md-4">
+              <label for="ebitda_amount1" class="form-label">EBITDA Amount</label>
+              <input type="number" class="form-control" id="ebitda_amount1" maxlength="12" placeholder="Enter EBITDA">
+            </div>
+
+            <!-- Save Button -->
+            <div class="col-12 text-end">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save me-1"></i> Save
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Type 2 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingDepEbitda">
+        <button class="accordion-button gradient-card collapsed" type="button" 
+                data-bs-toggle="collapse" data-bs-target="#depebitda" 
+                aria-expanded="false" aria-controls="depebitda">
+          <span class="slab-tag">Department-wise EBITDA</span>
+        </button>
+      </h2>
+      <div id="depebitda" class="accordion-collapse collapse" 
+           aria-labelledby="headingDepEbitda" data-bs-parent="#vcsAccordion">
+        <div class="card card-body">
+          <form class="row g-3">
+            <!-- FY Dropdown -->
+            <div class="col-md-4">
+              <label class="form-label">Financial Year</label>
+              <select class="form-select">
+                <option selected disabled>Choose FY</option>
+                <option value="2024-2025">FY 2024-2025</option>
+                <option value="2025-2026">FY 2025-2026</option>
+              </select>
+            </div>
+
+            <!-- EBITDA Amount -->
+            <div class="col-md-4">
+              <label for="ebitda_amount2" class="form-label">EBITDA Amount</label>
+              <input type="number" class="form-control" id="ebitda_amount2" maxlength="12" placeholder="20000">
+            </div>
+
+            <!-- Save Button -->
+            <div class="col-12 text-end">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save me-1"></i> Save
+              </button>
+            </div>
+
+            <!-- Data Table -->
+            <div class="col-12 mt-3">
+              <table id="fyTable" class="table table-hover align-middle table-bordered table-striped">
+                <thead class="table-dark">
+                  <tr>
+                    <th>ID</th>
+                    <th>Department</th>
+                    <th>Percentage</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>IT SW</td>
+                    <td>20%</td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+					  
+                      <button class="btn btn-sm btn-outline-info" title="History">
+                        <i class="bi bi-clock-history"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>IT QA</td>
+                    <td>15%</td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                      <button class="btn btn-sm btn-outline-info" title="History">
+                        <i class="bi bi-clock-history"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Type 3 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingReviewPeriod">
+        <button class="accordion-button gradient-card collapsed" type="button" 
+                data-bs-toggle="collapse" data-bs-target="#reviewperiod" 
+                aria-expanded="false" aria-controls="reviewperiod">
+          <span class="slab-tag">Review Period</span>
+        </button>
+      </h2>
+      <div id="reviewperiod" class="accordion-collapse collapse" 
+           aria-labelledby="headingReviewPeriod" data-bs-parent="#vcsAccordion">
+        <div class="card card-body">
+          <form class="row g-3 mb-4">
+      
+      <!-- Department Dropdown -->
+      <div class="col-md-4">
+        <label class="form-label">Select Department</label>
+        <select class="form-select">
+          <option selected disabled>Choose Department</option>
+          <option value="it">IT</option>
+          <option value="hr">Operation</option>
+          <option value="finance">Finance</option>
+        </select>
+      </div>
+	  <!-- Month Dropdown -->
+      <div class="col-md-4">
+        <label class="form-label">Choose month</label>
+        <select class="form-select">
+          <option selected disabled>Select month</option>
+          <option value="bd">Jan</option>
+          <option value="tl">Feb</option>
+          <option value="cse">Mar</option>
+          <option value="manager">Apr</option>
+        </select>
+      </div>
+
+      <!-- Review Dropdown -->
+      <div class="col-md-4">
+        <label class="form-label">Review Duration</label>
+        <select class="form-select">
+          <option selected disabled>Choose Duration</option>
+          <option value="bd">1 Months</option>
+          <option value="tl">2 Months</option>
+          <option value="cse">3 Months</option>
+          <option value="manager">4 Months</option>
+        </select>
+      </div>
+
+      <!-- Save Button -->
+      <div class="col-12 text-end">
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-save"></i> Save
+        </button>
+      </div>
+	<div class="col-12 mt-3">
+              <table id="fyTable" class="table table-hover align-middle table-bordered table-striped">
+                <thead class="table-dark">
+                  <tr>
+                    <th>ID</th>
+                    <th>Department</th>
+                    <th>Review month</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>IT</td>
+                    <td>Jan-Feb</td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+					  <button class="btn btn-sm btn-outline-danger me-1" title="Delete">
+						  <i class="bi bi-trash"></i>
+						</button>
+                      <button class="btn btn-sm btn-outline-info" title="History">
+                        <i class="bi bi-clock-history"></i>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>2</td>
+                    <td>Finance</td>
+                    <td>Mar-May</td>
+                    <td>
+                      <button class="btn btn-sm btn-outline-primary me-1" title="Edit">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+					  <button class="btn btn-sm btn-outline-danger me-1" title="Delete">
+						  <i class="bi bi-trash"></i>
+						</button>
+                      <button class="btn btn-sm btn-outline-info" title="History">
+                        <i class="bi bi-clock-history"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+    </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Type 4 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingExcludeDept">
+        <button class="accordion-button gradient-card collapsed" type="button" 
+                data-bs-toggle="collapse" data-bs-target="#excludeDept" 
+                aria-expanded="false" aria-controls="excludeDept">
+          <span class="slab-tag">Excluded Departments</span>
+        </button>
+      </h2>
+      <div id="excludeDept" class="accordion-collapse collapse" 
+           aria-labelledby="headingExcludeDept" data-bs-parent="#vcsAccordion">
+        <div class="card card-body">
+          <!-- Content goes here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Type 5 -->
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingHoldEmp">
+        <button class="accordion-button gradient-card collapsed" type="button" 
+                data-bs-toggle="collapse" data-bs-target="#holdEmployee" 
+                aria-expanded="false" aria-controls="holdEmployee">
+          <span class="slab-tag">On-Hold Employees</span>
+        </button>
+      </h2>
+      <div id="holdEmployee" class="accordion-collapse collapse" 
+           aria-labelledby="headingHoldEmp" data-bs-parent="#vcsAccordion">
+        <div class="card card-body">
+          <!-- Content goes here -->
+        </div>
+      </div>
+    </div>
+
   </div>
+</div>
+
+
+   
 </div>
 
 
@@ -957,6 +1474,7 @@ const datasync = `
   
   master:mastersTabsContent,
   settings:settingsTabsContent,
+  
   datasync:datasync,
   mail: MailSettingContent,
   process:process,
