@@ -56,6 +56,25 @@
         padding: 1rem;
       }
     }
+	/* Style for active tab: underline only */
+.nav-tabs .nav-link.active {
+    background-color: transparent !important;
+    color: #4a19d2  !important;
+    border: none !important;
+    outline: none !important;
+    box-shadow: none !important;
+    border-bottom: 3px solid #1976d2 !important; /* underline effect */
+}
+
+/* Optional: Inactive tabs */
+.nav-tabs .nav-link {
+    background-color: transparent !important;
+    color: #1976d2 !important;
+    border: none !important;
+    outline: none !important;
+}
+
+
   </style>
 </head>
 <body>
@@ -85,25 +104,23 @@
             <a href="#" class="nav-link" data-content="settings"
               ><i class="bi bi-gear me-2"></i> Settings</a>
           </li>
-          <li>
-            <a href="#" class="nav-link" data-content="mail"
-              ><i class="bi bi-envelope"></i> Mail Settings</a>
-          </li>
+         
           <li>
             <a href="#" class="nav-link" data-content="mapping"
               ><i class="bi bi-link-45deg"></i> Mapping</a>
           </li>
-          <li>
-            <a href="#" class="nav-link" data-content="bulk"
-              ><i class="bi bi-upload"></i> Bulk Upload</a>
-          </li>
+         
 		  <li>
             <a href="#" class="nav-link" data-content="datasync"
               ><i class="bi bi-arrow-repeat"></i> Data Sync</a>
           </li>
           <li>
             <a href="#" class="nav-link" data-content="review"
-              ><i class="bi bi-clipboard-data"></i> Performance Review</a>
+              ><i class="bi bi-clipboard-data"></i> Review</a>
+          </li>
+		  <li>
+            <a href="#" class="nav-link" data-content="process"
+              ><i class="bi bi-activity"></i> Process</a>
           </li>
           <li>
             <a href="#" class="nav-link" data-content="reports"
@@ -135,66 +152,24 @@
  
    const mastersTabsContent = `
       <ul class="nav nav-tabs mb-3" id="mastersTabs" role="tablist">
+        
         <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="policy-tab" data-bs-toggle="tab" data-bs-target="#policy" type="button" role="tab">Policy Master</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="kra-tab" data-bs-toggle="tab" data-bs-target="#kra" type="button" role="tab">KRA Master</button>
+		  <!-- <button class="nav-link active" id="policy-tab" data-bs-toggle="tab" data-bs-target="#policy" type="button" role="tab">Policy Master</button> -->
+          <button class="nav-link active" id="kra-tab" data-bs-toggle="tab" data-bs-target="#kra" type="button" role="tab">KRA Master</button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="document-tab" data-bs-toggle="tab" data-bs-target="#document" type="button" role="tab">Document Upload</button>
         </li>
       </ul>
       <div class="tab-content" id="mastersTabContent">
-        <div class="tab-pane fade show active" id="policy" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="col-md-6 form-floating">
-              <input type="text" class="form-control" id="policyName" placeholder="Policy Name" />
-              <label for="policyName">Policy Name</label>
-            </div>
-            <div class="col-md-6 form-floating">
-              <input type="date" class="form-control" id="policyDate" placeholder="Effective Date" />
-              <label for="policyDate">Effective Date</label>
-            </div>
-            <div class="col-12">
-              <button type="submit" class="btn btn-primary">Add Policy</button>
-            </div>
-          </form>
-          <table class="table table-hover align-middle">
-            <thead class="table-light">
-              <tr>
-                <th>ID</th>
-                <th>Policy Name</th>
-                <th>Effective Date</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Leave Policy</td>
-                <td>2025-01-01</td>
-                <td><button class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil"></i></button></td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Bonus Policy</td>
-                <td>2025-04-01</td>
-                <td><button class="btn btn-outline-secondary btn-sm"><i class="bi bi-pencil"></i></button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="tab-pane fade" id="kra" role="tabpanel">
+        
+        <div class="tab-pane fade show active" id="kra" role="tabpanel">
           <form class="row g-3 mb-4">
             <div class="col-md-6">
-              <label class="form-label">KRA Title</label>
-              <input type="text" class="form-control" placeholder="Enter KRA Title" />
+              <label class="form-label">KRA Describtion</label>
+              <input type="text" class="form-control" placeholder="Enter KRA " />
             </div>
-            <div class="col-md-6">
-              <label class="form-label">Weightage (%)</label>
-              <input type="number" class="form-control" />
-            </div>
+            
             <div class="col-12">
               <button class="btn btn-primary">Add KRA</button>
             </div>
@@ -204,19 +179,16 @@
               <tr>
                 <th>ID</th>
                 <th>KRA Title</th>
-                <th>Weightage</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>1</td>
                 <td>Sales Growth</td>
-                <td>40%</td>
               </tr>
               <tr>
                 <td>2</td>
                 <td>Customer Retention</td>
-                <td>30%</td>
               </tr>
             </tbody>
           </table>
@@ -257,271 +229,91 @@
     `;
 
     const settingsTabsContent = `
-      <ul class="nav nav-tabs mb-3" id="settingsTabs" role="tablist">
-        <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="marketing-tab" data-bs-toggle="tab" data-bs-target="#marketing" type="button" role="tab">Marketing Payout</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="payout-tab" data-bs-toggle="tab" data-bs-target="#payout" type="button" role="tab">Payout</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="ebitda-tab" data-bs-toggle="tab" data-bs-target="#ebitda" type="button" role="tab">EBITDA</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="dept-ebitda-tab" data-bs-toggle="tab" data-bs-target="#dept-ebitda" type="button" role="tab">Departmentwise EBITDA</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="kra-settings-tab" data-bs-toggle="tab" data-bs-target="#kra-settings" type="button" role="tab">KRA Settings</button>
-        </li>
-      </ul>
-      <div class="tab-content" id="settingsTabContent">
-        <div class="tab-pane fade show active" id="marketing" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="col-md-6">
-              <label class="form-label">Marketing Payout Type</label>
-              <input type="text" class="form-control" placeholder="Type of payout" />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">Amount</label>
-              <input type="number" class="form-control" placeholder="Amount" />
-            </div>
-            <div class="col-12">
-              <button class="btn btn-primary">Save Marketing Payout</button>
-            </div>
-          </form>
-          <table class="table table-hover align-middle">
-            <thead>
-              <tr><th>ID</th><th>Type</th><th>Amount</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>1</td><td>Quarterly</td><td>100000</td></tr>
-            </tbody>
-          </table>
-        </div>
+     <!-- Top-level Tabs -->
+<ul class="nav nav-tabs" id="settingsParentTabs" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="marketing-parent" data-bs-toggle="tab" data-bs-target="#marketing-group" type="button" role="tab">Marketing Settings</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="general-parent" data-bs-toggle="tab" data-bs-target="#general-group" type="button" role="tab">General Settings</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="mail-parent" data-bs-toggle="tab" data-bs-target="#mail-group" type="button" role="tab">Mail Settings</button>
+  </li>
+</ul>
 
-        <div class="tab-pane fade" id="payout" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="col-md-6 form-floating">
-              <input type="month" class="form-control" id="payoutPeriod" placeholder="Payout Period" />
-              <label for="payoutPeriod">Payout Period</label>
-            </div>
-            <div class="col-12">
-              <button class="btn btn-primary">Save Payout Period</button>
-            </div>
-          </form>
-          <table class="table table-hover align-middle">
-            <thead><tr><th>ID</th><th>Period</th></tr></thead>
-            <tbody><tr><td>1</td><td>Apr-Jun</td></tr></tbody>
-          </table>
-        </div>
+<!-- Second-level Tabs -->
+<div class="tab-content mt-2">
+  
+  <!-- Marketing Settings -->
+  <div class="tab-pane fade show active" id="marketing-group" role="tabpanel">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <button class="nav-link active" id="payout-tab" data-bs-toggle="tab" data-bs-target="#payout" type="button" role="tab">Policy role settings</button>
+      </li>
+	  <li class="nav-item">
+        <button class="nav-link" id="process-evaluation-tab" data-bs-toggle="tab" data-bs-target="#process-evaluation" type="button" role="tab">Process & Evaluation period</button>
+      </li>
+    </ul>
+  </div>
 
-        <div class="tab-pane fade" id="ebitda" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="col-md-6">
-              <label class="form-label">FY EBITDA Amount</label>
-              <input type="number" class="form-control" placeholder="Enter EBITDA" />
-            </div>
-            <div class="col-12">
-              <button class="btn btn-primary">Save EBITDA</button>
-            </div>
-          </form>
-          <table class="table table-hover align-middle">
-            <thead><tr><th>Year</th><th>EBITDA</th></tr></thead>
-            <tbody><tr><td>2025</td><td>₹ 50 Cr</td></tr></tbody>
-          </table>
-        </div>
+  <!-- General Settings -->
+  <div class="tab-pane fade" id="general-group" role="tabpanel">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <button class="nav-link active" id="review-tab" data-bs-toggle="tab" data-bs-target="#review" type="button" role="tab">Review Period</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" id="ex-incentiv-department-tab" data-bs-toggle="tab" data-bs-target="#ex-incentiv-department" type="button" role="tab">Exclude Incentive Department</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" id="fy-ebitda-tab" data-bs-toggle="tab" data-bs-target="#fy-ebitda" type="button" role="tab">FY EBITDA</button>
+      </li>
+	   <li class="nav-item">
+        <button class="nav-link" id="dept-ebitda-tab" data-bs-toggle="tab" data-bs-target="#dept-ebitda" type="button" role="tab">Department wise EBITDA</button>
+      </li>
+	  <li class="nav-item">
+        <button class="nav-link" id="stop-exclude-tab" data-bs-toggle="tab" data-bs-target="#stop-exclude-incentive" type="button" role="tab">Stop and waiting period Employee</button>
+      </li>
+    </ul>
+  </div>
 
-        <div class="tab-pane fade" id="dept-ebitda" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="col-md-6">
-              <label class="form-label">Department</label>
-              <input type="text" class="form-control" placeholder="Department name" />
-            </div>
-            <div class="col-md-6">
-              <label class="form-label">EBITDA Amount</label>
-              <input type="number" class="form-control" placeholder="Amount" />
-            </div>
-            <div class="col-12">
-              <button class="btn btn-primary">Save Department EBITDA</button>
-            </div>
-          </form>
-          <table class="table table-hover align-middle">
-            <thead><tr><th>Department</th><th>EBITDA</th></tr></thead>
-            <tbody><tr><td>Sales</td><td>₹ 10 Cr</td></tr></tbody>
-          </table>
-        </div>
+  <!-- Mail Settings -->
+  <div class="tab-pane fade" id="mail-group" role="tabpanel">
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <button class="nav-link active" id="template-tab" data-bs-toggle="tab" data-bs-target="#template" type="button" role="tab">Mail Template</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" id="mail-tab" data-bs-toggle="tab" data-bs-target="#mail" type="button" role="tab">Department wise Mail Template</button>
+      </li>
+	  <li class="nav-item">
+        <button class="nav-link" id="alert-reminder-tab" data-bs-toggle="tab" data-bs-target="#alert-reminder" type="button" role="tab">Alert Reminder Mail</button>
+      </li>
+	  <li class="nav-item">
+        <button class="nav-link" id="mail-config-tab" data-bs-toggle="tab" data-bs-target="#mail-config" type="button" role="tab">Mail Config</button>
+      </li>
+    </ul>
+  </div>
+</div>
 
-        <div class="tab-pane fade" id="kra-settings" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="col-md-12">
-              <label class="form-label">KRA Settings</label>
-              <input type="text" class="form-control" placeholder="Enter KRA setting details" />
-            </div>
-            <div class="col-12">
-              <button class="btn btn-primary">Save KRA Setting</button>
-            </div>
-          </form>
-          <table class="table table-hover align-middle">
-            <thead><tr><th>Setting</th></tr></thead>
-            <tbody><tr><td>Auto Calculate</td></tr></tbody>
-          </table>
-        </div>
-      </div>
+
     `;
 
 // Mapping tabs content
 const mappingTabsContent = `
 <ul class="nav nav-tabs mb-3" id="mappingTabs" role="tablist">
   <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="kra-mapping-tab" data-bs-toggle="tab" data-bs-target="#kra-mapping" type="button">KRA Mapping</button>
+    <button class="nav-link active" id="kra-allocation-tab" data-bs-toggle="tab" data-bs-target="#kra-allocation" type="button">KRA Allocation</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="reviewer-mapping-tab" data-bs-toggle="tab" data-bs-target="#reviewer-mapping" type="button">Reviewer Mapping</button>
+    <button class="nav-link" id="kra-mapping-tab" data-bs-toggle="tab" data-bs-target="#kra-mapping" type="button">KRA Mapping</button>
   </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="dept-mapping-tab" data-bs-toggle="tab" data-bs-target="#dept-mapping" type="button">Department-wise Mapping</button>
-  </li>
+ 
 </ul>
-<div class="tab-content" id="mappingTabContent">
-  <div class="tab-pane fade show active" id="kra-mapping">
-    <form id="kraForm" class="row g-3 mb-3">
-      <div class="col-md-6">
-        <label class="form-label">Select Department</label>
-        <select class="form-select" id="departmentSelect">
-          <option value="">-- Select Department --</option>
-          <option value="Sales">Sales</option>
-          <option value="HR">HR</option>
-          <option value="IT">IT</option>
-          <option value="Finance">Finance</option>
-        </select>
-      </div>
-      <div class="col-md-6 d-none" id="kraInputDiv">
-        <label class="form-label">Enter KRA</label>
-        <input type="text" class="form-control" id="kraInput" placeholder="Enter KRA here" />
-      </div>
-      <div class="col-12 d-flex gap-2">
-        <button type="submit" class="btn btn-primary">Save</button>
-        <button type="reset" class="btn btn-secondary" id="resetBtn">Reset</button>
-      </div>
-    </form>
-    <table class="table table-bordered d-none" id="kraTable">
-      <thead><tr><th>Department</th><th>KRA</th></tr></thead>
-      <tbody></tbody>
-    </table>
-  </div>
 
-  <div class="tab-pane fade" id="reviewer-mapping">
-    <form class="row g-3 mb-3" id="reviewerForm">
-      <div class="col-md-6">
-        <label class="form-label">Select Department</label>
-        <select class="form-select" id="reviewerDeptSelect">
-          <option value="">-- Select Department --</option>
-          <option value="Sales">Sales</option>
-          <option value="HR">HR</option>
-          <option value="IT">IT</option>
-          <option value="Finance">Finance</option>
-        </select>
-      </div>
-      <div class="col-md-6">
-        <label class="form-label">Select CXO</label>
-        <select class="form-select" id="reviewerCxoSelect">
-          <option value="">-- Select CXO --</option>
-        </select>
-      </div>
-      <div class="col-12">
-        <button type="submit" class="btn btn-primary">Save</button>
-      </div>
-    </form>
-    <table class="table table-bordered mt-2 d-none" id="reviewerTable">
-      <thead><tr><th>Department</th><th>CXO</th></tr></thead>
-      <tbody></tbody>
-    </table>
-  </div>
-
-  <div class="tab-pane fade" id="dept-mapping">
-   <form class="row g-3 mb-3" id="deptMappingForm">
-  <div class="col-md-6">
-    <label class="form-label">Select Department</label>
-    <select class="form-select" id="deptEbitdaSelect">
-      <option value="">-- Select Department --</option>
-      <option value="Sales">Sales</option>
-      <option value="HR">HR</option>
-      <option value="IT">IT</option>
-      <option value="Finance">Finance</option>
-    </select>
-  </div>
-  <div class="col-md-6">
-    <label class="form-label">EBITDA % for this Department</label>
-    <input type="number" class="form-control" id="ebitdaInput" placeholder="Enter % (0-100)" min="0" max="100" step="0.01" disabled />
-  </div>
-  <div class="col-12 mt-4">
-    <table class="table table-bordered" id="ebitdaTable">
-      <thead>
-        <tr>
-          <th>Department</th>
-          <th>EBITDA %</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-</form>
-  </div>
-</div>
 `;
 
-// Bulk Upload Tabs
-const bulkTabsContent = `
-<ul class="nav nav-tabs mb-3" id="bulkTabs" role="tablist">
-  <li class="nav-item" role="presentation">
-    <button class="nav-link active" id="kra-score-tab" data-bs-toggle="tab" data-bs-target="#kra-score" type="button">Department-wise KRA Score</button>
-  </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="incentive-deviation-tab" data-bs-toggle="tab" data-bs-target="#incentive-deviation" type="button">Incentive Deviation Amount</button>
-  </li>
-  <li class="nav-item" role="presentation">
-    <button class="nav-link" id="stop-payment-tab" data-bs-toggle="tab" data-bs-target="#stop-payment" type="button">Stop Payment Amount</button>
-  </li>
-</ul>
-<div class="tab-content" id="bulkTabContent">
-  ${generateBulkTab("kra-score")}
-  ${generateBulkTab("incentive-deviation")}
-  ${generateBulkTab("stop-payment")}
-</div>
-`;
-
-function generateBulkTab(id) {
-  return `
-  <div class="tab-pane fade ${id==="kra-score"?"show active":""}" id="${id}">
-    <form class="row g-3 mb-3 bulkForm">
-      <div class="col-md-6">
-        <label class="form-label">Select Department</label>
-        <select class="form-select bulkDeptSelect">
-          <option value="">-- Select Department --</option>
-          <option value="Sales">Sales</option>
-          <option value="HR">HR</option>
-          <option value="IT">IT</option>
-          <option value="Finance">Finance</option>
-        </select>
-      </div>
-      <div class="col-md-12">
-        <label class="form-label">Upload File</label>
-        <div class="dropzone">
-          Drag & Drop file here or click to browse
-          <input type="file" class="fileInput">
-        </div>
-      </div>
-      <div class="col-12 d-flex gap-2 align-items-center mt-2">
-        <button type="button" class="btn btn-outline-secondary downloadTemplate">
-          <i class="bi bi-download"></i> Download Template
-        </button>
-        <button type="submit" class="btn btn-primary">Save</button>
-        <button type="reset" class="btn btn-secondary">Reset</button>
-      </div>
-    </form>
-  </div>
-  `;
-}
 
 // Datasync tabs content
 const datasync = `
@@ -533,10 +325,10 @@ const datasync = `
     <button class="nav-link" id="cmm-tab" data-bs-toggle="tab" data-bs-target="#cmm-sync" type="button">CMM Sync</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="sap-tab" data-bs-toggle="tab" data-bs-target="#sap-sync" type="button">SAP Sync</button>
+    <button class="nav-link" id="collect-tab" data-bs-toggle="tab" data-bs-target="#collect-sync" type="button">Buddy Collect Sync</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button class="nav-link" id="Collect-tab" data-bs-toggle="tab" data-bs-target="#collect-sync" type="button">Collect Sync</button>
+    <button class="nav-link" id="remo-tab" data-bs-toggle="tab" data-bs-target="#remo-sync" type="button">Remo Sync</button>
   </li>
 </ul>
 <div class="tab-content" id="mappingTabContent">
@@ -549,7 +341,7 @@ const datasync = `
 		  </div>
 		  <br>
 		  <!-- Table initially hidden -->
-  <div class="row" id="resultTable" style="">
+  <div class="row" id="resultTableBI" style="">
     <div class="col-12">
       <table class="table table-bordered">
         <thead class="table-dark">
@@ -570,7 +362,7 @@ const datasync = `
 		</form>
 	   
 	  </div>
-	<div class="tab-pane fade show active" id="cmm-sync">
+	<div class="tab-pane fade" id="cmm-sync">
 		<form id="cmmForm" class="row g-3 mb-3">
 		  <div class="col-md-6">
 			 <div class="col-12">
@@ -579,7 +371,7 @@ const datasync = `
 		  </div>
 		  <br>
 		  <!-- Table initially hidden -->
-  <div class="row" id="resultTable" style="">
+  <div class="row" id="resultTableCMM" style="">
     <div class="col-12">
       <table class="table table-bordered">
         <thead class="table-dark">
@@ -601,7 +393,7 @@ const datasync = `
 		</form>
 	   
 	  </div>
-	  <div class="tab-pane fade show active" id="sap-sync">
+	  <div class="tab-pane fade" id="collect-sync">
 		<form id="sapForm" class="row g-3 mb-3">
 		  <div class="col-md-6">
 			 <div class="col-12">
@@ -610,7 +402,7 @@ const datasync = `
 		  </div>
 		  <br>
 		  <!-- Table initially hidden -->
-  <div class="row" id="resultTable" style="">
+  <div class="row" id="resultTableCollect" style="">
     <div class="col-12">
       <table class="table table-bordered">
         <thead class="table-dark">
@@ -622,7 +414,7 @@ const datasync = `
         <tbody>
           <tr>
             <td>1</td>
-            <td>Data sync with SAP application is Completed<span class="badge bg-danger">Not Completed</span></td>
+            <td>Data sync with Buddy collect application is not Completed<span class="badge bg-danger">Not Completed</span></td>
           </tr>
           
         </tbody>
@@ -632,12 +424,34 @@ const datasync = `
 		</form>
 	   
 	  </div>
-	  <div class="tab-pane fade show active" id="collect-sync">
+	  <div class="tab-pane fade" id="remo-sync">
 		<form id="collectForm" class="row g-3 mb-3">
 		  <div class="col-md-6">
-			 
+			  <div class="col-12">
+              <button class="btn btn-primary">Sync data</button>
+            </div>
 		  </div>
-		  
+		   <br>
+		  <!-- Table initially hidden -->
+  <div class="row" id="resultTableCollect" style="">
+    <div class="col-12">
+      <table class="table table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th>#</th>
+            <th>Data Sync Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Data sync with Remo application is not Completed<span class="badge bg-warning">Pending</span></td>
+          </tr>
+          
+        </tbody>
+      </table>
+    </div>
+  </div>
 		</form>
 	   
 	  </div>
@@ -646,11 +460,9 @@ const datasync = `
   const performanceTabContent = `
       <ul class="nav nav-tabs mb-3" id="performanceTabs" role="tablist">
         <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="primary-tab" data-bs-toggle="tab" data-bs-target="#primary" type="button" role="tab">Primary Level Checking</button>
+          <button class="nav-link active" id="primary-tab" data-bs-toggle="tab" data-bs-target="#primary" type="button" role="tab">Performance Review</button>
         </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="secondary-tab" data-bs-toggle="tab" data-bs-target="#secondary" type="button" role="tab">Secondary Level Checking</button>
-        </li>      
+       
       </ul>
       <div class="tab-content" id="performanceTabContent">
         <div class="tab-pane fade show active" id="primary" role="tabpanel">
@@ -774,142 +586,54 @@ const datasync = `
           </form>
         </div>
 
-        <div class="tab-pane fade" id="secondary" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="section-title">Secondary Level Checking</div><p>Final review by senior management.</p>
-            <div class="col-12">
-              <button class="btn btn-primary">Export</button>
-            </div>
-          </form>
-          <table class="table table-hover">
-        <thead><tr><th>Emp ID</th><th>Name</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td>EMP1001</td><td>Alice</td><td>Pending</td></tr>
-          <tr><td>EMP1002</td><td>Bob</td><td>Inprogress</td></tr>
-        </tbody>
-      </table>
-        </div>
+        
       </div>
       `;
       const reportTabContent = `
       <ul class="nav nav-tabs mb-3" id="reportTabs" role="tablist">
+	  <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="departmentReport-tab" data-bs-toggle="tab" data-bs-target="#departmentReport" type="button" role="tab">Department EBITDA Allotment</button>
+        </li> 
+		<li class="nav-item" role="presentation">
+          <button class="nav-link" id="deviation-group-tab" data-bs-toggle="tab" data-bs-target="#deviation-group" type="button" role="tab">Deviation Report</button>
+        </li>
+         
+       
         <li class="nav-item" role="presentation">
+          <button class="nav-link" id="reviewerReport-tab" data-bs-toggle="tab" data-bs-target="#reviewerReport" type="button" role="tab">Performance Score Report</button>
+        </li>                
+      </ul>
+	  <!-- Deviation group report -->
+	  <div class="tab-content mt-2">
+	  <div class="tab-pane fade" id="deviation-group" role="tabpanel">
+    <ul class="nav nav-tabs">
+       <li class="nav-item" role="presentation">
           <button class="nav-link active" id="kraReport-tab" data-bs-toggle="tab" data-bs-target="#kraReport" type="button" role="tab">KRA Mapped/UnMapped</button>
         </li>
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="stopPaymentReport-tab" data-bs-toggle="tab" data-bs-target="#stopPaymentReport" type="button" role="tab">StopPayment</button>
         </li>   
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="eligibilityReport-tab" data-bs-toggle="tab" data-bs-target="#eligibilityReport" type="button" role="tab">Eligibility Employee</button>
+          <button class="nav-link" id="eligibilityReport-tab" data-bs-toggle="tab" data-bs-target="#eligibilityReport" type="button" role="tab">Process/Not Processed Employee</button>
         </li>   
         <li class="nav-item" role="presentation">
           <button class="nav-link" id="deviationReport-tab" data-bs-toggle="tab" data-bs-target="#deviationReport" type="button" role="tab">Amount Deviation</button>
-        </li>   
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="departmentReport-tab" data-bs-toggle="tab" data-bs-target="#departmentReport" type="button" role="tab">Departmentwise</button>
-        </li>  
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="reviewerReport-tab" data-bs-toggle="tab" data-bs-target="#reviewerReport" type="button" role="tab">Reviewer</button>
-        </li>                
-      </ul>
-      <div class="tab-content" id="reportTabContent">
-        <div class="tab-pane fade show active" id="kraReport" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="section-title">KRA Mapped/Unmapped</div>
-            <div class="col-12">
-              <button class="btn btn-primary">Export</button>
-            </div>
-          </form>
-           <table class="table table-hover">
-          <thead><tr><th>Emp ID</th><th>Name</th><th>Status</th></tr></thead>
-          <tbody>
-          <tr><td>EMP1001</td><td>Alice</td><td>Mapped</td></tr>
-          <tr><td>EMP1002</td><td>Bob</td><td>Unmapped</td></tr>
-          </tbody>
-          </table>
-        </div>
-
-        <div class="tab-pane fade" id="stopPaymentReport" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="section-title">Stop Payment Report</div>
-            <div class="col-12">
-              <button class="btn btn-primary">Export</button>
-            </div>
-          </form>
-           <table class="table table-hover">
-        <thead><tr><th>Emp ID</th><th>Name</th><th>Reason</th></tr></thead>
-        <tbody>
-          <tr><td>EMP2001</td><td>Charlie</td><td>Resigned</td></tr>
-          <tr><td>EMP2002</td><td>David</td><td>On Leave</td></tr>
-        </tbody>
-      </table>
-        </div>
-        
-        <div class="tab-pane fade" id="eligibilityReport" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="section-title">Eligibility Report</div>
-            <div class="col-12">
-              <button class="btn btn-primary">Export</button>
-            </div>
-          </form>
-           <table class="table table-hover">
-        <thead><tr><th>Emp ID</th><th>Employee</th><th>Eligibility</th></tr></thead>
-        <tbody>
-          <tr><td>EMP3001</td><td>Eve</td><td>Eligible</td></tr>
-          <tr><td>EMP3002</td><td>Frank</td><td>Not Eligible</td></tr>
-        </tbody>
-      </table>
-        </div> 
-        <div class="tab-pane fade" id="deviationReport" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="section-title">Incentive Amount Deviation</div>
-            <div class="col-12">
-              <button class="btn btn-primary">Export</button>
-            </div>
-          </form>
-           <table class="table table-hover">
-        <thead><tr><th>Emp ID</th><th>Expected</th><th>Actual</th><th>Deviation</th></tr></thead>
-        <tbody>
-          <tr><td>EMP4001</td><td>₹10,000</td><td>₹9,500</td><td>-₹500</td></tr>
-          <tr><td>EMP4002</td><td>₹8,000</td><td>₹8,500</td><td>+₹500</td></tr>
-        </tbody>
-      </table>
-        </div>
-        <div class="tab-pane fade" id="departmentReport" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="section-title">Departmentwise Incentive</div>
-            <div class="col-12">
-              <button class="btn btn-primary">Export</button>
-            </div>
-          </form>
-           <table class="table table-hover">
-        <thead><tr><th>Department</th><th>Total Incentive</th></tr></thead>
-        <tbody>
-          <tr><td>Sales</td><td>₹2,00,000</td></tr>
-          <tr><td>Marketing</td><td>₹1,50,000</td></tr>
-        </tbody>
-      </table>
-        </div>
-        <div class="tab-pane fade" id="reviewerReport" role="tabpanel">
-          <form class="row g-3 mb-4">
-            <div class="section-title">Performance Reviewer</div>
-            <div class="col-12">
-              <button class="btn btn-primary">Export</button>
-            </div>
-          </form>
-           <table class="table table-hover">
-        <thead><tr><th>Reviewer</th><th>Employee</th><th>Status</th></tr></thead>
-        <tbody>
-          <tr><td>Manager A</td><td>Alice</td><td>Reviewed</td></tr>
-          <tr><td>Manager B</td><td>Bob</td><td>Pending</td></tr>
-        </tbody>
-      </table>
-        </div>
-
-
-
-      </div>
+        </li>
+    </ul>
+  </div>
+	  </div>
       `;
+	  const process=`
+	  <ul class="nav nav-tabs mb-3" id="processTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="incentiv-process-tab" data-bs-toggle="tab" data-bs-target="#incentiv-process" type="button" role="tab">Incentive Process</button>
+        </li>
+		<li class="nav-item" role="presentation">
+          <button class="nav-link" id="incentiv-adjustment-tab" data-bs-toggle="tab" data-bs-target="#incentiv-adjustment" type="button" role="tab">Incentive Adjustment</button>
+        </li>
+       
+      </ul>
+	  `;
   const MailSettingContent = `
       <ul class="nav nav-tabs mb-3" id="performanceTabs1" role="tablist">
         <li class="nav-item" role="presentation">
@@ -1230,11 +954,12 @@ const datasync = `
         </div>
       `,
   mapping: mappingTabsContent,
-  bulk: bulkTabsContent,
+  
   master:mastersTabsContent,
   settings:settingsTabsContent,
   datasync:datasync,
   mail: MailSettingContent,
+  process:process,
   review:performanceTabContent ,
   reports:reportTabContent
 	    
