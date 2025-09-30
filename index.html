@@ -22,7 +22,7 @@
   <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
-  
+
   <style>
     body {
       background: #f7fafc;
@@ -169,18 +169,24 @@
   </style>
  <!-- For tile Style -->
  <style>
+ 
     .employee-tile {
-      border: 1px solid #dee2e6;
-      border-radius: 10px;
-      padding: 15px;
-      background-color: #f8f9fa;
-      transition: transform 0.2s;
-      cursor: pointer;
-    }
-    .employee-tile:hover {
-      transform: scale(1.05);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
+	  background: #f8f9fa; /* light embossed look */
+	  border-radius: 12px;
+	  box-shadow: inset 2px 2px 5px rgba(0,0,0,0.1),
+	  inset -2px -2px 5px rgba(255,255,255,0.7),
+	  0 2px 6px rgba(0,0,0,0.1); /* soft outer shadow */
+	  transition: all 0.3s ease;
+	  cursor: pointer;
+	}
+
+.employee-tile:hover {
+		transform: translateY(-4px); /* lift up */
+		box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1),
+		inset -1px -1px 3px rgba(255,255,255,0.6),
+		0 6px 15px rgba(0,0,0,0.15); /* deeper shadow */
+		background: linear-gradient(145deg, #ffffff, #f0f0f0); /* slight gradient */
+	}
     .employee-name {
       font-weight: bold;
       font-size: 1.1rem;
@@ -190,6 +196,29 @@
       color: #6c757d;
     }
   </style>
+<!-- excel icon -->
+<Style>
+.excel-icon {
+    display: inline-block;
+    padding: 8px;
+    border-radius: 8px;
+    background: #f8f9fa;
+    box-shadow: inset 2px 2px 5px rgba(0,0,0,0.08),
+                inset -2px -2px 5px rgba(255,255,255,0.7),
+                0 2px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.excel-icon:hover {
+    transform: translateY(-2px);
+    box-shadow: inset 1px 1px 3px rgba(0,0,0,0.1),
+                inset -1px -1px 3px rgba(255,255,255,0.6),
+                0 6px 15px rgba(0,0,0,0.15);
+    background: linear-gradient(145deg, #ffffff, #e6f4ea);
+}
+</Style>
 </head>
 <body>
   <div class="container-fluid">
@@ -912,6 +941,7 @@
 </div>
   </div>
 </div>
+</div>
     `;
 
 // Mapping tabs content
@@ -1009,8 +1039,40 @@ const mappingTabsContent = `
 
         </td>
       </tr>
-      <tr>
+	  <tr>
         <td>2</td>
+        <td>skills upgraded in frequently</td>
+        <td>IT-Tech</td>
+        <td>Programmer</td>
+        <td>>25</td>
+        <td>Percentage</td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary me-1" title="Edit"><i class="bi bi-pencil-square"></i></button>
+          <button class="btn btn-sm btn-outline-danger me-1" title="Delete"><i class="bi bi-trash"></i></button>
+		        <button class="btn btn-sm btn-outline-info" title="History">
+        <i class="bi bi-clock-history"></i>
+      </button>
+
+        </td>
+      </tr>
+	  <tr>
+        <td>3</td>
+        <td>Maintain the codeing standard</td>
+        <td>IT-Tech</td>
+        <td>Programmer</td>
+        <td>>40</td>
+        <td>Percentage</td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary me-1" title="Edit"><i class="bi bi-pencil-square"></i></button>
+          <button class="btn btn-sm btn-outline-danger me-1" title="Delete"><i class="bi bi-trash"></i></button>
+		        <button class="btn btn-sm btn-outline-info" title="History">
+        <i class="bi bi-clock-history"></i>
+      </button>
+
+        </td>
+      </tr>
+      <tr>
+        <td>4</td>
         <td>skills upgraded in frequently</td>
         <td>IT-Tech</td>
         <td>Sr.Programmer</td>
@@ -1026,7 +1088,7 @@ const mappingTabsContent = `
         </td>
       </tr>
 	  <tr>
-        <td>3</td>
+        <td>5</td>
         <td>Maintain the codeing standard</td>
         <td>IT-Tech</td>
         <td>Jr.Programmer</td>
@@ -1046,8 +1108,124 @@ const mappingTabsContent = `
   </div>
 
   <div class="tab-pane fade" id="kra-mapping" role="tabpanel" aria-labelledby="kra-mapping-tab" tabindex="0">
-    <!-- KRA Mapping content here -->
-    <!-- Paste the mapping content -->
+    <form class="row g-3 mb-4 align-items-end">
+    <!-- Select Department -->
+    <div class="col-md-4">
+      <label for="departmentSelect" class="form-label small text-muted">Select Department</label>
+      <select id="departmentSelect" class="form-select form-select-sm" aria-label="Select Department">
+        <option selected disabled>Choose Department</option>
+        <option>Sales</option>
+        <option>Marketing</option>
+        <option>HR</option>
+        <option>Finance</option>
+      </select>
+    </div>
+    
+    <!-- Select Role -->
+    <div class="col-md-4">
+      <label for="roleSelect" class="form-label small text-muted">Select Role</label>
+      <select id="roleSelect" class="form-select form-select-sm" aria-label="Select Role">
+        <option selected disabled>Choose Role</option>
+        <option value="1">Manager</option>
+        <option value="2">Senior</option>
+        <option value="3">Junior</option>
+      </select>
+    </div>
+    
+    <!-- Employee -->
+   <div class="col-md-4">
+      <label for="Employee" class="form-label small text-muted"> Employee</label>
+      <select id="employees" class="form-select form-select-sm" aria-label="Select Employee">
+        <option selected disabled>Choose Employee</option>
+        <option value="1">AS149-Mani</option>       
+		<option value="2">AS908-Mala</option>       
+		<option value="3">AS875-Bala</option>       
+		<option value="4">AS343-Arun</option>  		
+      </select>
+    </div>    
+    
+
+  <!-- Sample Data Grid Table -->
+  <table id="kraTable" class="table table-hover align-middle table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+		<th> select</th>
+        <th>KRA Title</th>        
+        <th>Weightage</th>
+        <th>Combine</th>
+        
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+		<td><div class="form-check">
+        <input class="form-check-input" type="checkbox" id="checkIn1" checked />
+      </div></td>
+        <td>Properly log hours in JIRA >14 percentage</td>
+        <td>
+            <input type="text" class="form-control form-control-sm" value="50">
+        </td>
+        <td><div class="form-check">
+        <input class="form-check-input" type="checkbox" id="check1" />
+      </div></td>
+       
+      </tr>
+      <tr>
+        <td>2</td>
+		<td><div class="form-check">
+        <input class="form-check-input" type="checkbox" id="checkIn2" checked />
+      </div></td>
+        <td>skills upgraded in frequently >25 percentage</td>
+        <td>
+            <input type="text" class="form-control form-control-sm" value="50">
+        </td>
+        <td><div class="form-check">
+        <input class="form-check-input" type="checkbox" id="check2" />
+      </div></td>
+       
+      </tr>
+	  <tr>
+        <td>3</td>
+		<td><div class="form-check">
+        <input class="form-check-input" type="checkbox" id="checkIn3" checked />
+      </div></td>
+        <td>Maintain the codeing standard >40 percentage</td>
+        <td>
+            <input type="text" class="form-control form-control-sm" value="50">
+        </td>
+        <td><div class="form-check">
+        <input class="form-check-input" type="checkbox" id="check1" />
+      </div></td>
+       
+      </tr>
+      <tr>
+        <td>4</td>
+		<td><div class="form-check">
+        <input class="form-check-input" type="checkbox" id="checkIn3" checked/>
+      </div></td>
+        <td>Complainces Source</td>
+        <td>
+            <input type="text" class="form-control form-control-sm" value="50">
+        </td>
+        <td><div class="form-check">
+        <input class="form-check-input" type="checkbox" id="check2" />
+      </div></td>
+       
+      </tr>
+    </tbody>
+  </table>
+  
+    <!-- Save button aligned bottom right -->
+    <div class="col-md-12 d-flex justify-content-end align-items-end">
+      <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save me-1"></i> Save
+              </button>
+    </div>
+    
+  </form>
+  
   </div>
 </div> 
 
@@ -1209,53 +1387,55 @@ const datasync = `
 	  
       <div class="tab-content" id="performanceTabContent">
 	  <!-- Employee Info -->
-	   <div class="container py-4 tab-pane fade show active" id="primary" role="tabpanel">
+	<div class="container py-4 tab-pane fade show active" id="primary" role="tabpanel">
     <div class="row g-3 mb-4">
 		<div>
 		 <label for="info" class="form-label">Department base immediate reporting employee shown here</label>
 		</div> 
       <!-- Employee Tile 1 -->
       <div class="col-md-3">
-		  <div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
+		  <div class="card employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
 			   title="Name: AS149-Ravi| Role: IT Programmer| KRA: 3">
 			<div class="employee-name mb-1">AS149-Ravi</div>
 			<div class="employee-role mb-1">IT Programmer</div>
 			<div class="employee-dept">Assigned KRA: <span class="badge bg-primary">3</span>
 			</div>
+			<a href="#" class="stretched-link"></a>
 		  </div>
 		</div>
-
-
       <!-- Employee Tile 2 -->
       <div class="col-md-3">
-        <div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
+        <div class="card employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
 			   title="Name: AS232-Raman| Role: IT Sr.Programmer| KRA: 4">
 			<div class="employee-name mb-1">AS232-Raman</div>
 			<div class="employee-role mb-1">IT Sr.Programmer</div>
 			<div class="employee-dept">Assigned KRA: <span class="badge bg-primary">4</span>
 			</div>
+			<a href="#" class="stretched-link"></a>
 		</div>
       </div>
 
       <!-- Employee Tile 3 -->
       <div class="col-md-3">
-        <div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
+        <div class="card employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
 			   title="Name:AS768-Kamal| Role: IT Programmer Analyst| KRA: 2">
 			<div class="employee-name mb-1">AS768-Kamal</div>
 			<div class="employee-role mb-1">IT Programmer Analyst</div>
 			<div class="employee-dept">Assigned KRA: <span class="badge bg-primary">2</span>
 			</div>
+			<a href="#" class="stretched-link"></a>
 		</div>
       </div>
 
       <!-- Employee Tile 4 -->
       <div class="col-md-3">
-        <div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
+        <div class="card employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
 			   title="Name:AS980-Kavya| Role: IT Programmer Analyst| KRA: 3">
 			<div class="employee-name mb-1">AS980-Kavya</div>
 			<div class="employee-role mb-1">IT Programmer</div>
 			<div class="employee-dept">Assigned KRA: <span class="badge bg-primary">3</span>
 			</div>
+			<a href="#" class="stretched-link"></a>
 		</div>
       </div>
 
@@ -1339,40 +1519,203 @@ const datasync = `
         
       </div>
       `;
+	  <!-- Report menu navigation -->
       const reportTabContent = `
       <ul class="nav nav-tabs mb-3" id="reportTabs" role="tablist">
 	  <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="departmentReport-tab" data-bs-toggle="tab" data-bs-target="#departmentReport" type="button" role="tab">Department EBITDA Allotment</button>
+          <button class="nav-link active" id="marketing-tab" data-bs-toggle="tab" data-bs-target="#markenting-group" type="button" role="tab">Marketing Incentive Report</button>
         </li> 
 		<li class="nav-item" role="presentation">
-          <button class="nav-link" id="deviation-group-tab" data-bs-toggle="tab" data-bs-target="#deviation-group" type="button" role="tab">Deviation Report</button>
+          <button class="nav-link" id="ebitda-tab" data-bs-toggle="tab" data-bs-target="#ebitda-group" type="button" role="tab">EBITDA Report</button>
         </li>
-         
-       
         <li class="nav-item" role="presentation">
-          <button class="nav-link" id="reviewerReport-tab" data-bs-toggle="tab" data-bs-target="#reviewerReport" type="button" role="tab">Performance Score Report</button>
-        </li>                
+          <button class="nav-link" id="kra-tab" data-bs-toggle="tab" data-bs-target="#kra-group" type="button" role="tab">KRA Report</button>
+        </li>
+		<li class="nav-item" role="presentation">
+          <button class="nav-link" id="incentive-tab" data-bs-toggle="tab" data-bs-target="#incentive-group" type="button" role="tab">Incentive Report</button>
+        </li>
+		<li class="nav-item" role="presentation">
+          <button class="nav-link" id="performance-tab" data-bs-toggle="tab" data-bs-target="#performance-group" type="button" role="tab">Performance score Report</button>
+        </li>
       </ul>
 	  <!-- Deviation group report -->
 	  <div class="tab-content mt-2">
-	  <div class="tab-pane fade" id="deviation-group" role="tabpanel">
-    <ul class="nav nav-tabs">
-       <li class="nav-item" role="presentation">
-          <button class="nav-link active" id="kraReport-tab" data-bs-toggle="tab" data-bs-target="#kraReport" type="button" role="tab">KRA Mapped/UnMapped</button>
-        </li>
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="stopPaymentReport-tab" data-bs-toggle="tab" data-bs-target="#stopPaymentReport" type="button" role="tab">StopPayment</button>
-        </li>   
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="eligibilityReport-tab" data-bs-toggle="tab" data-bs-target="#eligibilityReport" type="button" role="tab">Process/Not Processed Employee</button>
-        </li>   
-        <li class="nav-item" role="presentation">
-          <button class="nav-link" id="deviationReport-tab" data-bs-toggle="tab" data-bs-target="#deviationReport" type="button" role="tab">Amount Deviation</button>
-        </li>
-    </ul>
-  </div>
+	<div class="container py-4 tab-pane fade show active" id="markenting-group" role="tabpanel">
+	 <div class="row g-3 mb-4">
+      <!-- Marketing tile -->
+      <div class="col-md-3">
+		  <div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
+			<!-- Card Header -->
+    <div class="employee-head mb-2 fw-bold">Incentive Process</div>
+
+    <!-- Role Selector -->
+    <div class="employee-role mb-2">
+        Role:
+        <select id="role" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+            <option value="BD">BD</option>
+            <option value="CSE">CSE</option>
+        </select>
+    </div>
+    <!-- Year Selector -->
+    <div class="employee-year mb-2">
+        Year:
+        <select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+        </select>
+    </div>
+    <!-- Excel Export -->
+    <div class="employee-export mt-2">Export
+		<a href="#" class="excel-icon" title="Export to Excel">
+			<i class="fas fa-file-excel fa-2x text-success"></i>
+		</a>
+	</div>
+		  </div>
+		</div>
+      
+     </div>
+    </div>
+	<div class="container py-4 tab-pane fade show" id="ebitda-group" role="tabpanel">
+	 <div class="row g-3 mb-4">
+      <!-- Employee Tile 1 -->
+      <div class="col-md-3">
+				<div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
+						<!-- Card Header -->
+				<div class="employee-head mb-2 fw-bold">Department Allocation</div>
+
+				<!-- Year Selector -->
+				<div class="employee-year mb-2">
+					Year:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="2024">2024</option>
+						<option value="2025">2025</option>
+					</select>
+				</div>
+				<!-- Excel Export -->
+				<div class="employee-export mt-2">Export
+					<a href="#" class="excel-icon" title="Export to Excel">
+						<i class="fas fa-file-excel fa-2x text-success"></i>
+					</a>
+				</div>
+			</div>
 	  </div>
+	  <div class="col-md-3">
+				<div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
+						<!-- Card Header -->
+				<div class="employee-head mb-2 fw-bold">Department Amount Deviation</div>
+
+				<!-- Year Selector -->
+				<div class="employee-year mb-2">
+					Year:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="2024">2024</option>
+						<option value="2025">2025</option>
+					</select>
+				</div>
+				<!-- Excel Export -->
+				<div class="employee-export mt-2">Export
+					<a href="#" class="excel-icon" title="Export to Excel">
+						<i class="fas fa-file-excel fa-2x text-success"></i>
+					</a>
+				</div>
+			</div>
+	  </div>
+      
+     </div>
+    </div>
+	<div class="container py-4 tab-pane fade show" id="kra-group" role="tabpanel">
+	 <div class="row g-3 mb-4">
+	<div class="col-md-3">
+	<!-- department wise KRA -->
+			<div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
+						<!-- Card Header -->
+				<div class="employee-head mb-2 fw-bold">Department wise KRA</div>
+				<div class="employee-year mb-2">
+					Department:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="it">IT</option>
+						<option value="fin">Finance</option>
+					</select>
+				</div>
+				<!-- Year Selector -->
+				<div class="employee-year mb-2">
+					Year:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="2024">2024</option>
+						<option value="2025">2025</option>
+					</select>
+				</div>
+				<!-- Excel Export -->
+				<div class="employee-export mt-2">Export
+					<a href="#" class="excel-icon" title="Export to Excel">
+						<i class="fas fa-file-excel fa-2x text-success"></i>
+					</a>
+				</div>
+			</div>
+	</div>
+	<div class="col-md-3">
+			<!-- KRA Mapped Employee-->
+				<div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
+						<!-- Card Header -->
+				<div class="employee-head mb-2 fw-bold">KRA Mapped Employee</div>
+				<div class="employee-year mb-2">
+					Department:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="it">IT</option>
+						<option value="fin">Finance</option>
+					</select>
+				</div>
+				<!-- Year Selector -->
+				<div class="employee-year mb-2">
+					Year:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="2024">2024</option>
+						<option value="2025">2025</option>
+					</select>
+				</div>
+				<!-- Excel Export -->
+				<div class="employee-export mt-2">Export
+					<a href="#" class="excel-icon" title="Export to Excel">
+						<i class="fas fa-file-excel fa-2x text-success"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<!-- KRA unmapped Employee -->
+			<div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
+						<!-- Card Header -->
+				<div class="employee-head mb-2 fw-bold">KRA Un-Mapped Employee</div>
+				<div class="employee-year mb-2">
+					Department:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="it">IT</option>
+						<option value="fin">Finance</option>
+					</select>
+				</div>
+				<!-- Year Selector -->
+				<div class="employee-year mb-2">
+					Year:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="2024">2024</option>
+						<option value="2025">2025</option>
+					</select>
+				</div>
+				<!-- Excel Export -->
+				<div class="employee-export mt-2">Export
+					<a href="#" class="excel-icon" title="Export to Excel">
+						<i class="fas fa-file-excel fa-2x text-success"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	  </div>	
+            
+     </div>
+    </div>
       `;
+	  
+	  <!-- Process menu navigation -->
 	  const process = `
 	  <ul class="nav nav-tabs mb-3" id="processTabs" role="tablist">
         <li class="nav-item" role="presentation">
