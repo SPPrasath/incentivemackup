@@ -22,6 +22,11 @@
   <!-- DataTables CSS -->
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.bootstrap5.min.css">
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Font Awesome (for icons) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
     body {
@@ -195,6 +200,20 @@
       font-size: 0.9rem;
       color: #6c757d;
     }
+	.disabled-div {
+    pointer-events: none; /* disables all interaction */
+    opacity: 0.6;         /* gives a 'disabled' look */
+	}
+	.score-input-fail {
+    border-color: #ff0000;  /* red border */
+    background-color: #f9f9f9; /* optional: lighter background */
+    color: #000; /* optional: text color */
+	}
+	.score-input-success{
+    border-color: #22c50a;  /* green border */
+    background-color: #f9f9f9; /* optional: lighter background */
+    color: #000; /* optional: text color */
+	}
   </style>
 <!-- excel icon -->
 <Style>
@@ -995,11 +1014,12 @@ const mappingTabsContent = `
     
     <!-- Target/Weightage and Unit dropdown inline -->
     <div class="col-md-6 d-flex align-items-end gap-2">
-      <input type="text" id="targetWeightage" class="form-control form-control-sm" placeholder="Enter Target / Weightage here" aria-describedby="targetWeightageError" />
+      <input type="text" id="targetWeightage" class="form-control form-control-sm" placeholder="Enter Target here" aria-describedby="targetError" />
       <select id="targetWeightageUnit" class="form-select form-select-sm" aria-label="Select Unit" style="max-width: 120px;">
         <option value="Percentage">Percentage</option>
         <option value="Days">Days</option>
       </select>
+	  <input type="text" id="Weightage" class="form-control form-control-sm" placeholder="Enter Weightage here" aria-describedby="weightageError" />
     </div>
     
     <!-- Save button aligned bottom right -->
@@ -1017,9 +1037,10 @@ const mappingTabsContent = `
         <th>KRA Title</th>
         <th>Department</th>
         <th>Role</th>
-        <th>Target Weightage</th>
+        <th>Target</th>
         <th>Unit</th>
-        <th>Action</th>
+        <th>Weightage</th>
+		<th>Action</th>
       </tr>
     </thead>
     <tbody>
@@ -1030,6 +1051,7 @@ const mappingTabsContent = `
         <td>Programmer</td>
         <td>>14</td>
         <td>Percentage</td>
+		<td>25</td>
         <td>
           <button class="btn btn-sm btn-outline-primary me-1" title="Edit"><i class="bi bi-pencil-square"></i></button>
           <button class="btn btn-sm btn-outline-danger me-1" title="Delete"><i class="bi bi-trash"></i></button>
@@ -1046,6 +1068,7 @@ const mappingTabsContent = `
         <td>Programmer</td>
         <td>>25</td>
         <td>Percentage</td>
+		<td>25</td>
         <td>
           <button class="btn btn-sm btn-outline-primary me-1" title="Edit"><i class="bi bi-pencil-square"></i></button>
           <button class="btn btn-sm btn-outline-danger me-1" title="Delete"><i class="bi bi-trash"></i></button>
@@ -1062,6 +1085,7 @@ const mappingTabsContent = `
         <td>Programmer</td>
         <td>>40</td>
         <td>Percentage</td>
+		<td>50</td>
         <td>
           <button class="btn btn-sm btn-outline-primary me-1" title="Edit"><i class="bi bi-pencil-square"></i></button>
           <button class="btn btn-sm btn-outline-danger me-1" title="Delete"><i class="bi bi-trash"></i></button>
@@ -1078,6 +1102,7 @@ const mappingTabsContent = `
         <td>Sr.Programmer</td>
         <td>>30</td>
         <td>Percentage</td>
+		<td>50</td>
         <td>
           <button class="btn btn-sm btn-outline-primary me-1" title="Edit"><i class="bi bi-pencil-square"></i></button>
           <button class="btn btn-sm btn-outline-danger me-1" title="Delete"><i class="bi bi-trash"></i></button>
@@ -1091,9 +1116,10 @@ const mappingTabsContent = `
         <td>5</td>
         <td>Maintain the codeing standard</td>
         <td>IT-Tech</td>
-        <td>Jr.Programmer</td>
+        <td>Sr.Programmer</td>
         <td>>20</td>
         <td>Percentage</td>
+		<td>50</td>
         <td>
           <button class="btn btn-sm btn-outline-primary me-1" title="Edit"><i class="bi bi-pencil-square"></i></button>
           <button class="btn btn-sm btn-outline-danger me-1" title="Delete"><i class="bi bi-trash"></i></button>
@@ -1394,14 +1420,16 @@ const datasync = `
 		</div> 
       <!-- Employee Tile 1 -->
       <div class="col-md-3">
-		  <div class="card employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" 
-			   title="Name: AS149-Ravi| Role: IT Programmer| KRA: 3">
+		  <div class="card employee-tile p-3 border rounded shadow-sm disabled-div" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top" title="Name: AS149-Ravi| Role: IT Programmer| KRA: 3" >
 			<div class="employee-name mb-1">AS149-Ravi</div>
 			<div class="employee-role mb-1">IT Programmer</div>
-			<div class="employee-dept">Assigned KRA: <span class="badge bg-primary">3</span>
-			</div>
-			<a href="#" class="stretched-link"></a>
-		  </div>
+			<!-- <div class="employee-dept">Assigned KRA: <span class="badge bg-primary">3</span> -->
+			<div class="progress border border-success rounded" style="height:0px;">
+				<div class="progress-bar bg-success" role="progressbar" style="width: 100%;" 
+					aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">100%
+				</div>
+		    </div>
+		   </div>
 		</div>
       <!-- Employee Tile 2 -->
       <div class="col-md-3">
@@ -1409,9 +1437,12 @@ const datasync = `
 			   title="Name: AS232-Raman| Role: IT Sr.Programmer| KRA: 4">
 			<div class="employee-name mb-1">AS232-Raman</div>
 			<div class="employee-role mb-1">IT Sr.Programmer</div>
-			<div class="employee-dept">Assigned KRA: <span class="badge bg-primary">4</span>
-			</div>
-			<a href="#" class="stretched-link"></a>
+			<!-- <div class="employee-dept">Assigned KRA: <span class="badge bg-primary">3</span> -->
+			<div class="progress border border-success rounded" style="height:0px;">
+				<div class="progress-bar bg-success" role="progressbar" style="width: 100%;" 
+					aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">100%
+				</div>
+		    </div>
 		</div>
       </div>
 
@@ -1421,9 +1452,12 @@ const datasync = `
 			   title="Name:AS768-Kamal| Role: IT Programmer Analyst| KRA: 2">
 			<div class="employee-name mb-1">AS768-Kamal</div>
 			<div class="employee-role mb-1">IT Programmer Analyst</div>
-			<div class="employee-dept">Assigned KRA: <span class="badge bg-primary">2</span>
+			<!-- <div class="employee-dept">Assigned KRA: <span class="badge bg-primary">3</span> -->
+			<div class="progress border border-inprogress  rounded" style="height:0px;">
+				<div class="progress-bar bg-inprogress " role="progressbar" style="width: 72%" 
+				aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">72%
+				</div>
 			</div>
-			<a href="#" class="stretched-link"></a>
 		</div>
       </div>
 
@@ -1433,9 +1467,12 @@ const datasync = `
 			   title="Name:AS980-Kavya| Role: IT Programmer Analyst| KRA: 3">
 			<div class="employee-name mb-1">AS980-Kavya</div>
 			<div class="employee-role mb-1">IT Programmer</div>
-			<div class="employee-dept">Assigned KRA: <span class="badge bg-primary">3</span>
-			</div>
-			<a href="#" class="stretched-link"></a>
+			<!-- <div class="employee-dept">Assigned KRA: <span class="badge bg-primary">3</span> -->
+			<div class="progress border border-danger " style="height:0px;">
+				<div class="progress-bar bg-danger" role="progressbar" style="width:0%" 
+					aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">0%
+				</div>
+		    </div>
 		</div>
       </div>
 
@@ -1452,54 +1489,58 @@ const datasync = `
           <label for="employeeName" class="form-label">Employee Name</label>
           <input type="text" class="form-control" id="employeeName" placeholder="AS149-Ravi" disabled />
         </div>
-        
-		<div class="col-md-3">
-          <label class="form-label">Overall Score</label>
-          <input type="text" class="form-control" id="overallScore" readonly value="85.90%" />
-        </div>
 		<div class="col-md-3">
           <label for="reviewer" class="form-label">Reviewer</label>
           <input type="text" class="form-control" id="reviewer" placeholder="Immediate reporting" disabled />
         </div>
       </div>
 
-     
-
       <table class="table table-bordered align-middle">
-        <thead>
+        <thead class="table-dark">
           <tr>
             <th>KRA</th>
-            <th>Weight (%)</th>
-            <th>Score (0–100)</th>
-          </tr>
+            <th>Weightage</th>
+            <th data-bs-toggle="tooltip" title="System not allow grater than target">Score</th>
+			<th data-bs-toggle="tooltip" title="(Achive/Target) * Weightage">Achived</th>
+			 <th>Comment</th>
+		  </tr>
         </thead>
         <tbody>
           <tr>
-            <td><small>Properly log hours in JIRA</small></td>
-            <td><input type="number" class="form-control weight-input" min="0" max="100" value="14.00" /></td>
-            <td><input type="number" class="form-control score-input" min="0" max="100" value="85.00" /></td>
+            <td><small>Properly log hours in JIRA >14 percentage</small></td>
+            <td><input type="text" class="form-control weight-input" min="0" max="100" value="25" disabled /></td>
+            <td><input type="number" class="form-control score-achive-input" min="0" max="14" value="12.00" /></td>
+			<td><input type="text" class="form-control score-input-fail" value="21" disabled /></td>
+			<td><textarea class="form-control" id="reviewerComments" rows="3"></textarea></td>
           </tr>
           <tr>
-            <td><small>Daily commit the source code in GIT</small></td>
-            <td><input type="number" class="form-control weight-input" min="0" max="100" value="22.50" /></td>
-            <td><input type="number" class="form-control score-input" min="0" max="100" value="90.00" /></td>
+            <td><small>skills upgraded in frequently >25 percentage</small></td>
+            <td><input type="number" class="form-control weight-input" min="0" max="100" value="25" disabled /></td>
+            <td><input type="number" class="form-control score-achive-input" min="0" max="25" value="22.00" /></td>
+			<td><input type="text" class="form-control score-input-fail" value="22" disabled /></td>
+			<td><textarea class="form-control" id="reviewerComments" rows="3"></textarea></td>
           </tr>
           <tr>
-            <td><small>Maintain the codeing standard</small></td>
-            <td><input type="number" class="form-control weight-input" min="0" max="100" value="30.50" /></td>
-            <td><input type="number" class="form-control score-input" min="0" max="100" value="80.00" /></td>
+            <td><small>Maintain the codeing standard >40 percentage</small></td>
+            <td><input type="number" class="form-control weight-input" min="0" max="100" value="25" disabled /></td>
+            <td><input type="number" class="form-control score-achive-input" min="0" max="100" value="45.00" /></td>
+			<td><input type="text" class="form-control score-input-success" value="25" disabled /></td>
+			<td><textarea class="form-control" id="reviewerComments" rows="3"></textarea></td>
           </tr>
           <tr>
-            <td><small>skills upgraded in frequently</small></td>
-            <td><input type="number" class="form-control weight-input" min="0" max="100" value="33.00" /></td>
-            <td><input type="number" class="form-control score-input" min="0" max="100" value="88.00" /></td>
+            <td><small>Update the source code in GIT frequently> 60 percentage</small></td>
+             <td><input type="number" class="form-control weight-input" min="0" max="100" value="25" disabled /></td>
+            <td><input type="number" class="form-control score-achive-input" min="0" max="100" value="65.00" /></td>
+			<td><input type="text" class="form-control score-input-success" value="25" disabled /></td>
+			<td><textarea class="form-control" id="reviewerComments" rows="3"></textarea></td>
           </tr>
         </tbody>
         <tfoot>
           <tr>
             <th colspan="1" class="text-end">Total Weight:</th>
             <th><span id="totalWeight">100.00</span>%</th>
-            <th><span id="finalWeightedScore">85.90</span></th>
+			<th></th>
+            <th><span id="finalWeightedScore">93.00%</span></th>
           </tr>
         </tfoot>
       </table>
@@ -1625,6 +1666,27 @@ const datasync = `
     </div>
 	<div class="container py-4 tab-pane fade show" id="kra-group" role="tabpanel">
 	 <div class="row g-3 mb-4">
+	 <div class="col-md-3">
+	<!-- KRA Report -->
+			<div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
+						<!-- Card Header -->
+				<div class="employee-head mb-2 fw-bold">KRA Master Report</div>
+				<!-- Year Selector -->
+				<div class="employee-year mb-2">
+					Year:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="2024">2024</option>
+						<option value="2025">2025</option>
+					</select>
+				</div>
+				<!-- Excel Export -->
+				<div class="employee-export mt-2">Export
+					<a href="#" class="excel-icon" title="Export to Excel">
+						<i class="fas fa-file-excel fa-2x text-success"></i>
+					</a>
+				</div>
+			</div>
+	</div>
 	<div class="col-md-3">
 	<!-- department wise KRA -->
 			<div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
@@ -1712,7 +1774,159 @@ const datasync = `
 	  </div>	
             
      </div>
+    <div class="container py-4 tab-pane fade show" id="incentive-group" role="tabpanel">
+	 <div class="row g-3 mb-4">
+	<div class="col-md-3">
+	<!-- Incentive Process Employees-->
+			<div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
+						<!-- Card Header -->
+				<div class="employee-head mb-2 fw-bold">Incentive Process Employees</div>
+				<div class="employee-year mb-2">
+					Department:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="it">IT</option>
+						<option value="fin">Finance</option>
+					</select>
+				</div>
+				<!-- Year Selector -->
+				<div class="employee-year mb-2">
+					Year:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="2024">2024</option>
+						<option value="2025">2025</option>
+					</select>
+				</div>
+				<!-- Excel Export -->
+				<div class="employee-export mt-2">Export
+					<a href="#" class="excel-icon" title="Export to Excel">
+						<i class="fas fa-file-excel fa-2x text-success"></i>
+					</a>
+				</div>
+			</div>
+	</div>
+	<div class="col-md-3">
+			<!-- Incentive UnProcess Employees-->
+				<div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
+						<!-- Card Header -->
+				<div class="employee-head mb-2 fw-bold">Incentive UnProcess Employees</div>
+				<div class="employee-year mb-2">
+					Department:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="it">IT</option>
+						<option value="fin">Finance</option>
+					</select>
+				</div>
+				<!-- Year Selector -->
+				<div class="employee-year mb-2">
+					Year:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="2024">2024</option>
+						<option value="2025">2025</option>
+					</select>
+				</div>
+				<!-- Excel Export -->
+				<div class="employee-export mt-2">Export
+					<a href="#" class="excel-icon" title="Export to Excel">
+						<i class="fas fa-file-excel fa-2x text-success"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<!-- Incentive Deviation Employee -->
+			<div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
+						<!-- Card Header -->
+				<div class="employee-head mb-2 fw-bold">Incentive Amount Deviation Employees</div>
+				<div class="employee-year mb-2">
+					Department:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="it">IT</option>
+						<option value="fin">Finance</option>
+					</select>
+				</div>
+				<!-- Year Selector -->
+				<div class="employee-year mb-2">
+					Year:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="2024">2024</option>
+						<option value="2025">2025</option>
+					</select>
+				</div>
+				<!-- Excel Export -->
+				<div class="employee-export mt-2">Export
+					<a href="#" class="excel-icon" title="Export to Excel">
+						<i class="fas fa-file-excel fa-2x text-success"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<!-- Incentive Hold Employee -->
+			<div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
+						<!-- Card Header -->
+				<div class="employee-head mb-2 fw-bold">Incentive Hold Employees</div>
+				<div class="employee-year mb-2">
+					Department:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="it">IT</option>
+						<option value="fin">Finance</option>
+					</select>
+				</div>
+				<!-- Year Selector -->
+				<div class="employee-year mb-2">
+					Year:
+					<select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+						<option value="2024">2024</option>
+						<option value="2025">2025</option>
+					</select>
+				</div>
+				<!-- Excel Export -->
+				<div class="employee-export mt-2">Export
+					<a href="#" class="excel-icon" title="Export to Excel">
+						<i class="fas fa-file-excel fa-2x text-success"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+	  </div>	
+            
+     </div>
+    <div class="container py-4 tab-pane fade show" id="performance-group" role="tabpanel">
+	 <div class="row g-3 mb-4">
+      <!-- Marketing tile -->
+      <div class="col-md-3">
+		  <div class="employee-tile p-3 border rounded shadow-sm" data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="top">
+			<!-- Card Header -->
+    <div class="employee-head mb-2 fw-bold">Incentive Score Employees</div>
+
+    <!-- Role Selector -->
+    <div class="employee-role mb-2">
+        Department:
+        <select id="role" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+            <option value="IT">IT</option>
+            <option value="FIN">Finance</option>
+        </select>
     </div>
+    <!-- Year Selector -->
+    <div class="employee-year mb-2">
+        Year:
+        <select id="year" class="form-select form-select-sm d-inline-block" style="max-width: 120px;">
+            <option value="2024">2024</option>
+            <option value="2025">2025</option>
+        </select>
+    </div>
+    <!-- Excel Export -->
+    <div class="employee-export mt-2">Export
+		<a href="#" class="excel-icon" title="Export to Excel">
+			<i class="fas fa-file-excel fa-2x text-success"></i>
+		</a>
+	</div>
+		  </div>
+		</div>
+      
+     </div>
+    </div>
+	</div>
       `;
 	  
 	  <!-- Process menu navigation -->
@@ -2205,23 +2419,7 @@ const datasync = `
  
     const contentTitle = document.getElementById("contentTitle");
     const dynamicContent = document.getElementById("dynamicContent");
-    const sidebarAccordion = document.getElementById("sidebarAccordion");
-
-    // Listen to Masters and Settings accordion button clicks
-    sidebarAccordion.querySelectorAll("button[data-menu]").forEach((btn) => {
-      btn.addEventListener("click", function () {
-        const menu = this.getAttribute("data-menu");
-        if (menu === "masters") {
-          contentTitle.textContent = "Masters";
-          dynamicContent.innerHTML = mastersTabsContent;
-        } else if (menu === "settings") {
-          contentTitle.textContent = "Settings";
-          dynamicContent.innerHTML = settingsTabsContent;
-        }
-		 if(key==="mapping") attachMappingLogic();
-		 if(key==="bulk") attachBulkLogic();
-      });
-    });
+   
 
     // Sidebar main nav non-accordion links
     document.querySelectorAll('.sidebar ul.nav.flex-column > li > a.nav-link').forEach(item => {
@@ -2237,7 +2435,7 @@ const datasync = `
 
         // If dashboard, load charts
         if (key === "dashboard") {
-          setTimeout(initCharts, 50);
+          setTimeout(initDashboardCharts, 50);
         }
 		 
       });
@@ -2245,36 +2443,95 @@ const datasync = `
 
     // Map for non-accordion menus
     const contentMap = {
-      dashboard: `
-        <h5>Analytics</h5>
-        <div class="row mb-4">
-          <div class="col-md-6 mb-3">
-            <canvas id="barChart"></canvas>
-          </div>
-          <div class="col-md-6 mb-3">
-            <canvas id="pieChart"></canvas>
-          </div>
-          <div class="col-md-6 mb-3">
-            <canvas id="lineChart"></canvas>
-          </div>
-          <div class="col-md-6 mb-3">
-            <canvas id="doughnutChart"></canvas>
-          </div>
-        </div>
+  dashboard: `
+    <h5>Analytics</h5>
 
-        <h5>Overview</h5>
-        <div class="row">
-          <div class="col-sm-4">
-            <div class="card p-3 mb-3"><span class="fs-6">Policies</span><div class="display-6 fw-bold">8</div></div>
-          </div>
-          <div class="col-sm-4">
-            <div class="card p-3 mb-3"><span class="fs-6">KRAs</span><div class="display-6 fw-bold">16</div></div>
-          </div>
-          <div class="col-sm-4">
-            <div class="card p-3 mb-3"><span class="fs-6">Eligible Employees</span><div class="display-6 fw-bold">74</div></div>
-          </div>
+    <!-- Filter Icon -->
+    <div class="mb-3 d-flex justify-content-end">
+      <i class="bi bi-funnel-fill text-primary filter-icon" id="filterToggle" title="Show Filters" style="cursor:pointer;font-size:1.3rem;"></i>
+    </div>
+
+    <!-- Filter Panel -->
+    <div class="card p-3 shadow-sm mb-4" id="filterPanel" style="display:none;">
+      <div class="row g-3">
+        <div class="col-md-3">
+          <label class="form-label">Department</label>
+          <select class="form-select">
+            <option>HR</option>
+            <option>IT</option>
+            <option>Finance</option>
+            <option>Marketing</option>
+          </select>
         </div>
-      `,
+        <div class="col-md-3">
+          <label class="form-label">Role</label>
+          <select class="form-select">
+            <option>Manager</option>
+            <option>Developer</option>
+            <option>Analyst</option>
+            <option>Intern</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Designation</label>
+          <select class="form-select">
+            <option>Senior</option>
+            <option>Junior</option>
+            <option>Lead</option>
+          </select>
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Year</label>
+          <select class="form-select">
+            <option>2023</option>
+            <option>2024</option>
+            <option>2025</option>
+          </select>
+        </div>
+      </div>
+      <div class="mt-3 text-end">
+        <button class="btn btn-primary"><i class="bi bi-check-circle me-1"></i> Apply</button>
+      </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3">
+        <canvas id="barChart"></canvas>
+      </div>
+      <div class="col-md-6 mb-3">
+        <canvas id="pieChart"></canvas>
+      </div>
+      <div class="col-md-6 mb-3">
+        <canvas id="lineChart"></canvas>
+      </div>
+      <div class="col-md-6 mb-3">
+        <canvas id="doughnutChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Overview Section -->
+    <h5>Overview</h5>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="card p-3 mb-3"><span class="fs-6">Incentive</span>
+		 <div class="small mt-2">
+			<span class="text-success">Processed Employee: 850</span><br>
+			<span class="text-danger">Unprocessed Employee: 125</span>
+		 </div>
+		</div>
+      </div>
+      <div class="col-sm-4">
+        <div class="card p-3 mb-3"><span class="fs-6">Eligible Employees</span>
+		<div class="small mt-2">
+			<span class="text-success">Eligible Employee: 975</span><br>
+			<span class="text-danger">Not Eligible Employee: 125</span>
+		 </div>
+		</div>
+      </div>
+    </div>
+  `,
+
   mapping: mappingTabsContent,
   
   master:mastersTabsContent,
@@ -2288,201 +2545,55 @@ const datasync = `
 	    
     };
 
-    function initCharts() {
-      // Bar Chart
-      new Chart(document.getElementById("barChart"), {
-        type: "bar",
-        data: {
-          labels: ["Q1", "Q2", "Q3", "Q4"],
-          datasets: [{
-            label: "Revenue",
-            data: [120, 150, 180, 200],
-            backgroundColor: "#0d6efd"
-          }]
-        }
-      });
-
-      // Pie Chart
-      new Chart(document.getElementById("pieChart"), {
-        type: "pie",
-        data: {
-          labels: ["Policies", "KRAs", "Employees"],
-          datasets: [{
-            data: [8, 16, 74],
-            backgroundColor: ["#0d6efd", "#198754", "#ffc107"]
-          }]
-        }
-      });
-
-      // Line Chart
-      new Chart(document.getElementById("lineChart"), {
-        type: "line",
-        data: {
-          labels: ["Jan", "Feb", "Mar", "Apr"],
-          datasets: [{
-            label: "Performance",
-            data: [65, 75, 70, 85],
-            borderColor: "#dc3545",
-            fill: false,
-            tension: 0.3
-          }]
-        }
-      });
-
-      // Doughnut Chart
-      new Chart(document.getElementById("doughnutChart"), {
-        type: "doughnut",
-        data: {
-          labels: ["Completed", "Pending", "In Progress"],
-          datasets: [{
-            data: [40, 20, 30],
-            backgroundColor: ["#198754", "#ffc107", "#0dcaf0"]
-          }]
-        }
-      });
+    // Toggle filter panel
+document.addEventListener("click", function(e) {
+  if (e.target && e.target.id === "filterToggle") {
+    const panel = document.getElementById("filterPanel");
+    if (panel) {
+      panel.style.display = (panel.style.display === "none" || panel.style.display === "") ? "block" : "none";
     }
-	
-// Mapping Logic
-function attachMappingLogic() {
-  const deptTabs = document.getElementById('mappingTabs');
-  const activeTab = deptTabs.querySelector('.nav-link.active');
-  if (activeTab && activeTab.id === 'dept-mapping-tab') {
-    attachDeptMappingLogic();
   }
+});
 
-  deptTabs.addEventListener('shown.bs.tab', function (e) {
-    if (e.target.id === 'dept-mapping-tab') {
-      attachDeptMappingLogic();
+// Init Charts when dashboard loads
+function initDashboardCharts() {
+  const ctxBar = document.getElementById("barChart");
+  if (!ctxBar) return; // prevent running if dashboard not active
+
+  new Chart(ctxBar, {
+    type: "bar",
+    data: {
+      labels: ["HR", "IT", "Finance", "Marketing"],
+      datasets: [{ label: "Employees", data: [50, 120, 80, 40], backgroundColor: "#0d6efd" }]
     }
   });
 
-  const deptSelect = document.getElementById("departmentSelect");
-  const kraInputDiv = document.getElementById("kraInputDiv");
-  const kraForm = document.getElementById("kraForm");
-  const kraTable = document.getElementById("kraTable").querySelector("tbody");
-
-  deptSelect?.addEventListener("change", () => {
-    kraInputDiv.classList.toggle("d-none", !deptSelect.value);
-  });
-
-  kraForm?.addEventListener("submit", e => {
-    e.preventDefault();
-    const kra = document.getElementById("kraInput").value;
-    if(deptSelect.value && kra) {
-      kraTable.insertAdjacentHTML("beforeend", `<tr><td>${deptSelect.value}</td><td>${kra}</td></tr>`);
-      document.getElementById("kraTable").classList.remove("d-none");
-      kraForm.reset(); kraInputDiv.classList.add("d-none");
+  new Chart(document.getElementById("pieChart"), {
+    type: "pie",
+    data: {
+      labels: ["Male", "Female"],
+      datasets: [{ data: [60, 40], backgroundColor: ["#198754", "#dc3545"] }]
     }
   });
 
-  // Reviewer Mapping
-  const reviewerDept = document.getElementById("reviewerDeptSelect");
-  const reviewerCxo = document.getElementById("reviewerCxoSelect");
-  const reviewerForm = document.getElementById("reviewerForm");
-  const reviewerTable = document.getElementById("reviewerTable").querySelector("tbody");
-
-  const cxos = { Sales:["CXO A","CXO B"], HR:["CXO C"], IT:["CXO D"], Finance:["CXO E"] };
-
-  reviewerDept?.addEventListener("change", () => {
-    reviewerCxo.innerHTML = `<option value="">-- Select CXO --</option>`;
-    if(reviewerDept.value) cxos[reviewerDept.value].forEach(c=> reviewerCxo.insertAdjacentHTML("beforeend", `<option>${c}</option>`));
+  new Chart(document.getElementById("lineChart"), {
+    type: "line",
+    data: {
+      labels: ["Jan","Feb","Mar","Apr","May"],
+      datasets: [{ label: "Trend", data: [100,200,150,250,300], borderColor: "#198754", fill: false }]
+    }
   });
 
-  reviewerForm?.addEventListener("submit", e => {
-    e.preventDefault();
-    if(reviewerDept.value && reviewerCxo.value) {
-      reviewerTable.insertAdjacentHTML("beforeend", `<tr><td>${reviewerDept.value}</td><td>${reviewerCxo.value}</td></tr>`);
-      document.getElementById("reviewerTable").classList.remove("d-none");
-      reviewerForm.reset();
+  new Chart(document.getElementById("doughnutChart"), {
+    type: "doughnut",
+    data: {
+      labels: ["Active","Inactive"],
+      datasets: [{ data: [70,30], backgroundColor: ["#ffc107","#6c757d"] }]
     }
   });
 }
 
-// Department-wise Mapping Logic
-function attachDeptMappingLogic() {
-  const deptSelect = document.getElementById("deptEbitdaSelect");
-  const ebitdaInput = document.getElementById("ebitdaInput");
-  const ebitdaTableBody = document.getElementById("ebitdaTable").querySelector("tbody");
-  
-  const allDepartments = ["Sales", "HR", "IT", "Finance"];
-  
-  // Initial population of the table with 0%
-  function resetTable() {
-    ebitdaTableBody.innerHTML = '';
-    allDepartments.forEach(dept => {
-      const row = `<tr><td>${dept}</td><td>0%</td></tr>`;
-      ebitdaTableBody.insertAdjacentHTML('beforeend', row);
-    });
-  }
-  
-  resetTable();
-  
-  deptSelect?.addEventListener("change", () => {
-    ebitdaInput.disabled = !deptSelect.value;
-    ebitdaInput.value = '';
-    if (deptSelect.value) {
-      const remainingDepts = allDepartments.filter(d => d !== deptSelect.value);
-      const remainingPct = 100 / (remainingDepts.length + 1);
-      
-      ebitdaTableBody.innerHTML = '';
-      allDepartments.forEach(dept => {
-        const percentage = (dept === deptSelect.value) ? 0 : remainingPct;
-        const row = `<tr><td>${dept}</td><td>${percentage.toFixed(2)}%</td></tr>`;
-        ebitdaTableBody.insertAdjacentHTML('beforeend', row);
-      });
-    } else {
-      resetTable();
-    }
-  });
-  
-  ebitdaInput?.addEventListener("input", () => {
-    let enteredPct = parseFloat(ebitdaInput.value);
-    
-    if (isNaN(enteredPct) || enteredPct < 0) {
-      enteredPct = 0;
-    } else if (enteredPct > 100) {
-      enteredPct = 100;
-      ebitdaInput.value = 100;
-    }
-    
-    const selectedDept = deptSelect.value;
-    const remainingPct = 100 - enteredPct;
-    const remainingDepts = allDepartments.filter(dept => dept !== selectedDept);
-    const dividedPct = remainingDepts.length > 0 ? remainingPct / remainingDepts.length : 0;
-    
-    ebitdaTableBody.innerHTML = '';
-    allDepartments.forEach(dept => {
-      let percentage;
-      if (dept === selectedDept) {
-        percentage = enteredPct;
-      } else {
-        percentage = dividedPct;
-      }
-      const row = `<tr><td>${dept}</td><td>${percentage.toFixed(2)}%</td></tr>`;
-      ebitdaTableBody.insertAdjacentHTML('beforeend', row);
-    });
-  });
-}
 
-// Bulk Logic
-function attachBulkLogic() {
-  document.querySelectorAll(".bulkForm").forEach(form => {
-    const dropzone = form.querySelector(".dropzone");
-    const fileInput = form.querySelector(".fileInput");
-    const downloadTemplate = form.querySelector(".downloadTemplate");
-
-    dropzone.addEventListener("click", () => fileInput.click());
-    dropzone.addEventListener("dragover", e => { e.preventDefault(); dropzone.classList.add("dragover"); });
-    dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
-    dropzone.addEventListener("drop", e => { e.preventDefault(); dropzone.classList.remove("dragover"); fileInput.files = e.dataTransfer.files; });
-
-    downloadTemplate.addEventListener("click", () => {
-      const link = document.createElement("a"); link.href="template.xlsx"; link.download="Template.xlsx"; link.click();
-    });
-
-    form.addEventListener("submit", e => { e.preventDefault(); alert("File uploaded for department: "+form.querySelector(".bulkDeptSelect").value); form.reset(); });
-  });
-}
   </script>
    
 
